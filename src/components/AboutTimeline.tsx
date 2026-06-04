@@ -64,16 +64,16 @@ export default function AboutTimeline() {
     },
     {
       year: "2022 - Present",
-      title: "Ecosystem Builder & Advisor",
-      subtitle: "1trepreneur Community & Founder Advisory",
+      title: "Venture Corridor Builder",
+      subtitle: "1trepreneur Corridors & Ecosystem Strategy",
       icon: <Users className="w-5 h-5" />,
       category: "mentorship",
-      context: "Today, I turn my 10+ years of building, fundraising, struggling, and scaling into direct, actionable advisory for founders. I founded 1trepreneur, a founder community connecting minds across the UAE and India. I help entrepreneurs build stories that get funded and models that don't self-destruct.",
+      context: "Today, I bridge key startup ecosystems, connecting high-intensity tech teams with cross-border capital, launch channels, and strategic positioning. I guide the 1trepreneur corridor, mobilizing active founder networks to remove structural fundraising barriers and catalyze scale-ups across global markets.",
       textbookVsReality: {
         textbook: "Advisors should give template consulting charts and high-level strategy booklets.",
-        reality: "Founders need deep truth, operational reality checks, and practical tactics. I work as an honest sparring partner to sharpen your clarity.",
+        reality: "Founders need narrative gravity, absolute unit economics clarity, and real-world execution. I work as an honest strategic partner to optimize your trajectory."
       },
-      keyTakeaway: "Unclear thinking and weak storytelling kill more startups than bad ideas. Let's get clear."
+      keyTakeaway: "Unclear narrative positioning and weak economic structures kill more startups than bad ideas. Let's build real pipelines."
     }
   ];
 
@@ -89,12 +89,12 @@ export default function AboutTimeline() {
             My Journey
           </span>
           <h2 className="text-3xl font-sans font-bold tracking-tight text-white mt-2">
-            Real combat experience, not <span className="serif-italic text-amber-500">textbook theory</span>.
+            Real operator experience, not <span className="serif-italic text-amber-500">textbook blueprints</span>.
           </h2>
         </div>
         <div className="flex items-center gap-2 text-xs text-zinc-400 bg-black/50 border border-[#1f1f1f] px-4 py-2 rounded-lg font-mono">
           <Sparkles className="w-4 h-4 text-amber-500" />
-          <span> UAE / GCC & India Ecosystem</span>
+          <span> GCC, India & Global Corridors</span>
         </div>
       </div>
 
@@ -174,7 +174,7 @@ export default function AboutTimeline() {
 
                   <div className="bg-[#050505] text-white p-4 rounded-xl relative overflow-hidden border border-amber-500/10">
                     <div className="absolute top-0 right-0 py-0.5 px-2 bg-zinc-900 text-amber-500 text-[10px] uppercase font-mono tracking-wider rounded-bl border-l border-b border-[#1f1f1f]">
-                      Combat Reality
+                      Execution Reality
                     </div>
                     <div className="text-xs text-amber-500 font-mono font-bold mb-1">
                       REAL LESSON

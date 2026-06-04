@@ -165,7 +165,7 @@ export default function EcomAuditCalculator() {
           Tactical Tools
         </span>
         <h2 className="text-3xl font-sans font-bold tracking-tight text-white mt-2">
-          E-commerce & Marketplace <span className="serif-italic text-amber-500">Feasibility Diagnostic</span>
+          Store Economics <span className="serif-italic text-amber-500">Diagnostics</span>
         </h2>
         <p className="text-zinc-400 text-sm md:text-base mt-2 max-w-2xl leading-relaxed">
           Tweak your operational metrics below to test the viability of your business model. This simulator uses Jimmy's real-world Plantshop.ae unit economics constants.
@@ -315,46 +315,76 @@ export default function EcomAuditCalculator() {
         <div className="lg:col-span-7 space-y-6">
           {/* Key Metric indicators layout */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div className="bg-[#090909] border border-[#1f1f1f] p-4 rounded-xl">
-              <span className="text-zinc-500 font-mono text-[10px] tracking-wider uppercase block font-semibold">
-                Logistics Spend
-              </span>
-              <div className="flex items-baseline gap-1 mt-1">
-                <span className={`text-xl md:text-2xl font-sans font-black ${calculations.logisticsRatio > 20 ? "text-red-400" : "text-white"}`}>
-                  {calculations.logisticsRatio.toFixed(0)}%
+            <div className="bg-[#090909] border border-[#1f1f1f] p-4 rounded-xl flex flex-col justify-between">
+              <div>
+                <span className="text-zinc-500 font-mono text-[10px] tracking-wider uppercase block font-semibold">
+                  Logistics Spend Ratio
+                </span>
+                <div className="flex items-baseline gap-1 mt-1">
+                  <span className={`text-xl md:text-2xl font-sans font-black ${calculations.logisticsRatio > 20 ? "text-red-400" : "text-white"}`}>
+                    {calculations.logisticsRatio.toFixed(0)}%
+                  </span>
+                </div>
+              </div>
+              <div className="mt-3">
+                <div className="w-full bg-[#161616] h-1.5 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full rounded-full transition-all duration-500 ${calculations.logisticsRatio > 20 ? "bg-red-500 w-full" : "bg-emerald-500"}`}
+                    style={{ width: `${Math.min(calculations.logisticsRatio * 3.3, 100)}%` }}
+                  />
+                </div>
+                <span className={`text-[10px] font-mono mt-1.5 block font-medium ${calculations.logisticsRatio > 20 ? "text-red-400" : "text-emerald-500"}`}>
+                  {calculations.logisticsRatio > 20 ? "Exceeds 20% limit" : "Healthy margins preserved"}
                 </span>
               </div>
-              <span className={`text-[10px] font-mono mt-1 block font-medium ${calculations.logisticsRatio > 20 ? "text-red-400" : "text-emerald-500"}`}>
-                {calculations.logisticsRatio > 20 ? "Exceeds 20% Limit" : "Strict shipping ratio verified"}
-              </span>
             </div>
 
-            <div className="bg-[#090909] border border-[#1f1f1f] p-4 rounded-xl">
-              <span className="text-zinc-500 font-mono text-[10px] tracking-wider uppercase block font-semibold">
-                Estimated LTV / CAC
-              </span>
-              <div className="flex items-baseline gap-1 mt-1">
-                <span className={`text-xl md:text-2xl font-sans font-black ${calculations.ltvToCacRatio < 3 ? "text-amber-500" : "text-emerald-400"}`}>
-                  {calculations.ltvToCacRatio.toFixed(1)}x
+            <div className="bg-[#090909] border border-[#1f1f1f] p-4 rounded-xl flex flex-col justify-between">
+              <div>
+                <span className="text-zinc-500 font-mono text-[10px] tracking-wider uppercase block font-semibold">
+                  Estimated LTV / CAC
+                </span>
+                <div className="flex items-baseline gap-1 mt-1">
+                  <span className={`text-xl md:text-2xl font-sans font-black ${calculations.ltvToCacRatio < 3 ? "text-amber-500" : "text-emerald-450"}`}>
+                    {calculations.ltvToCacRatio.toFixed(1)}x
+                  </span>
+                </div>
+              </div>
+              <div className="mt-3">
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((dot) => {
+                    const threshold = calculations.ltvToCacRatio;
+                    let dotColor = "bg-zinc-800";
+                    if (dot <= 3 && threshold >= dot - 0.5) dotColor = threshold < 3 ? "bg-amber-500" : "bg-emerald-500";
+                    if (dot > 3 && threshold >= dot - 0.5) dotColor = "bg-emerald-500";
+                    return <span key={dot} className={`w-2 h-2 rounded-full ${dotColor}`} />;
+                  })}
+                </div>
+                <span className="text-[10px] text-zinc-500 font-mono block mt-1.5">
+                  Target threshold: &gt;3.0x
                 </span>
               </div>
-              <span className="text-[10px] text-zinc-500 font-mono block mt-1">
-                Target ratio: &gt; 3.0x
-              </span>
             </div>
 
-            <div className="col-span-2 md:col-span-1 bg-amber-500 text-black p-4 rounded-xl shadow-md shadow-amber-500/15">
-              <span className="text-[#050505] font-mono text-[10px] tracking-wider uppercase block font-bold">
-                Monthly Net Cash flow
-              </span>
-              <div className="flex items-baseline gap-1 mt-1">
-                <span className="text-xl md:text-2xl font-sans font-black">
-                  {calculations.monthlyNetProfit < 0 ? "" : "+"}{calculations.monthlyNetProfit.toLocaleString()} AED
+            <div className="col-span-2 md:col-span-1 bg-amber-500 text-black p-4 rounded-xl shadow-md shadow-amber-500/15 flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-x-3 translate-y-3">
+                <DollarSign className="w-24 h-24 text-black" />
+              </div>
+              <div>
+                <span className="text-[#050505] font-mono text-[10px] tracking-wider uppercase block font-bold">
+                  Monthly Net Cash Flow
+                </span>
+                <div className="flex items-baseline gap-1 mt-1">
+                  <span className="text-xl md:text-2xl font-sans font-black">
+                    {calculations.monthlyNetProfit < 0 ? "" : "+"}{calculations.monthlyNetProfit.toLocaleString()} AED
+                  </span>
+                </div>
+              </div>
+              <div className="mt-4">
+                <span className="text-[10px] text-zinc-950/80 font-mono block">
+                  Based on {metrics.monthlyOrders} orders/mo
                 </span>
               </div>
-              <span className="text-[10px] text-zinc-950/80 font-mono block mt-1">
-                Based on {metrics.monthlyOrders} orders
-              </span>
             </div>
           </div>
 
@@ -367,13 +397,20 @@ export default function EcomAuditCalculator() {
             
             <div className="w-full overflow-hidden">
               <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto">
+                <defs>
+                  <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={calculations.monthlyNetProfit >= 0 ? "#f59e0b" : "#ef4444"} stopOpacity="0.25" />
+                    <stop offset="100%" stopColor={calculations.monthlyNetProfit >= 0 ? "#f59e0b" : "#ef4444"} stopOpacity="0.00" />
+                  </linearGradient>
+                </defs>
+
                 {/* Horizontal grid lines */}
-                <line x1={paddingLeft} y1={paddingTop} x2={width - paddingRight} y2={paddingTop} stroke="#1b1b1b" strokeDasharray="3,3" />
-                <line x1={paddingLeft} y1={(height - paddingBottom + paddingTop) / 2} x2={width - paddingRight} y2={(height - paddingBottom + paddingTop) / 2} stroke="#1b1b1b" strokeDasharray="3,3" />
-                <line x1={paddingLeft} y1={height - paddingBottom} x2={width - paddingRight} y2={height - paddingBottom} stroke="#1b1b1b" strokeDasharray="3,3" />
+                <line x1={paddingLeft} y1={paddingTop} x2={width - paddingRight} y2={paddingTop} stroke="#1f1f1f" strokeDasharray="3,3" />
+                <line x1={paddingLeft} y1={(height - paddingBottom + paddingTop) / 2} x2={width - paddingRight} y2={(height - paddingBottom + paddingTop) / 2} stroke="#1f1f1f" strokeDasharray="3,3" />
+                <line x1={paddingLeft} y1={height - paddingBottom} x2={width - paddingRight} y2={height - paddingBottom} stroke="#1f1f1f" strokeDasharray="3,3" />
 
                 {/* Shaded Area fill under line */}
-                <polygon points={fillPoints} fill={calculations.monthlyNetProfit >= 0 ? "rgba(245, 158, 11, 0.05)" : "rgba(239, 68, 68, 0.05)"} />
+                <polygon points={fillPoints} fill="url(#areaGrad)" />
 
                 {/* Profit/Loss Area Line */}
                 <polyline points={points} fill="none" stroke={calculations.monthlyNetProfit >= 0 ? "#f59e0b" : "#ef4444"} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -390,11 +427,11 @@ export default function EcomAuditCalculator() {
                   if (index === 0 || index === 5 || index === 11) {
                     return (
                       <g key={index}>
-                        <circle cx={x} cy={y} r="4" fill="#050505" stroke="#f59e0b" strokeWidth="1.5" />
-                        <text x={x} y={y - 10} textAnchor="middle" fontSize="9" fontWeight="bold" fontFamily="monospace" fill="#d1d5db">
+                        <circle cx={x} cy={y} r="5" fill="#050505" stroke={calculations.monthlyNetProfit >= 0 ? "#f59e0b" : "#ef4444"} strokeWidth="2" />
+                        <text x={x} y={y - 12} textAnchor="middle" fontSize="9" fontWeight="bold" fontFamily="monospace" fill="#ffffff">
                           {d.cumulative >= 0 ? "+" : ""}{(d.cumulative / 1000).toFixed(0)}k
                         </text>
-                        <text x={x} y={height - paddingBottom + 13} textAnchor="middle" fontSize="9" fontFamily="monospace" fill="#6b7280">
+                        <text x={x} y={height - paddingBottom + 13} textAnchor="middle" fontSize="9" fontFamily="monospace" fill="#52525b">
                           {d.month}
                         </text>
                       </g>

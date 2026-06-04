@@ -44,15 +44,15 @@ app.post("/api/clarity", async (req, res) => {
   const getFallbackClarity = (msg: string) => {
     const textLower = msg.toLowerCase();
     if (textLower.includes("pitch") || textLower.includes("investor") || textLower.includes("raise") || textLower.includes("deck")) {
-      return `### Jimmy's Take on Fundraising & Storytelling\n\nVCs review hundreds of decks a week. They reject most of them not because the idea is bad, but because the structure is confusing and the narrative is weak. \n\nHere is what you need to focus on right now:\n1. **Primal Problem**: Is the pain point you are solving glaring and urgent, or are you building a "nice-to-have" utility?\n2. **Architectural Honesty**: Be extremely clear about your metrics, team capabilities, and current traction. Never try to larp or inflate numbers.\n3. **Decisive Next Steps**: Refine your elevator pitch into exactly one sentence. Can you explain your business model to a 10-year old? Let's work on sharpening that.`;
+      return `### Venture Narrative & Fundraising Architecture\n\nInstitutional capital allocators review hundreds of opportunities a week. They reject most of them not because the core vision is flawed, but because the business architecture is opaque and the storytelling lacks traction.\n\nFocus on these primary variables immediately:\n1. **High-Urgency Needs**: Is the problem you target critical and pain-inducing, or are you building a discretionary utility?\n2. **Financial Genuineness**: Present completely transparent metrics, team capacities, and traction velocity. Avoid larping or over-speculating.\n3. **Clarity of Transaction**: Can you formulate your primary exchange map in a single clear line? Let's refine your narrative structure.`;
     }
     if (textLower.includes("ecommerce") || textLower.includes("e-commerce") || textLower.includes("logistics") || textLower.includes("marketplace")) {
-      return `### Jimmy's Take on E-commerce & Marketplaces\n\nBuilding Plantshop.ae from scratch taught me that e-commerce is not a tech game—it's a logistics, cash flow, and trust game. \n\nBefore you spend another dollar on marketing, ask yourself:\n1. **Vendor Systems**: How reliable is your sourcing and inventory coordination? If your suppliers fluctuate, your client experience collapses.\n2. **Logistics Density**: Are you spending more than 15-20% of your basket value on delivery? If so, your unit economics will bleed indefinitely.\n3. **The Post-Purchase Loop**: Re-acquiring customers is too expensive. What is your strategy to turn a one-time buyer into a repeat advocate? Let's audit your funnel operations.`;
+      return `### Commerce Infrastructure & Logistics Diagnostics\n\nBuilding Plantshop.ae from the ground up validated that commerce is never a pure tech play—it is a physical distribution, cash-flow velocity, and operational trust discipline. \n\nPrior to allocating capital to marketing, optimize these coordinates:\n1. **Interoperable Vendor Systems**: How is your multi-node dispatch and inventory tracking coordinated? If partners fluctuate, fulfillment fails.\n2. **Logistics SLA Density**: Are logistics expenditures exceeding 15% of your average order value? If so, pricing pressure will erode margins.\n3. **The Customer Retention Flywheel**: Focus on repeat transaction rates rather than high-acquisition spikes. Let's audit your margin structures.`;
     }
     if (textLower.includes("gcc") || textLower.includes("uae") || textLower.includes("dubai") || textLower.includes("middle east") || textLower.includes("expansion")) {
-      return `### Jimmy's Take on GCC & Middle East Market Entry\n\nExpanding from India or emerging markets into the Middle East is a fantastic growth move, but UAE/GCC startup dynamics are highly relationship-driven.\n\nTo succeed here, keep in mind:\n1. **Local Presence**: You cannot build relationships remotely. You need ground execution, licensing navigation, and genuine ecosystem integration.\n2. **B2B vs B2C Dynamics**: The UAE has a highly affluent population but relatively compact B2C market size compared to India. If you are B2C, focus heavily on premium logistics and basket size. If B2B, validate your corporate speed-to-contract early.\n3. **Venture Capital Realities**: Local VCs expect you to be committed to the region, with concrete business development. Let's map your localized messaging.`;
+      return `### GCC Market Entry Pathways & Regional Corridors\n\nExpanding technology or platform operations into the Middle East represents significant potential, but GCC business models are heavily driven by relationship capital and structured integration.\n\nTo de-risk your deployment here:\n1. **On-the-Ground Speed**: Remote expansion is a myth. You need dedicated execution, regulatory pathway alignments, and actual local ecosystem access.\n2. **B2B vs B2C Dynamics**: The region offers exceptionally high purchasing power yet finite consumer density. For direct commerce, prioritize premium SLAs and basket size. For B2B platforms, establish corporate pilot agreements early in your timeline.\n3. **Allocation Dynamics**: Regional funds expect physical commitment and long-term localized value creation. Let's map your sandbox expansion frameworks.`;
     }
-    return `### Jimmy's Founder Advisory\n\nIn my experience co-founding Plantshop.ae and working with 500 Global, I've seen that startups don't fail because of bad ideas. They fail because of unclear thinking, co-founder friction, poor storytelling, and running out of money before validating demand.\n\nTell me: \n- What is the single biggest bottleneck that is keeping you awake tonight?\n- Are you struggling with *storytelling* (pitch and raises), *operations* (marketplace, economics), or *clarity* (not knowing where to play)?\n\nLet's cut through the noise and figure out your next decisive move.`;
+    return `### Venture Corridor Strategic Advisory\n\nDuring my experience co-founding Plantshop.ae and collaborating with global accelerators like 500 Global, I have learned that ventures rarely fail because of concept failure. They disintegrate from narrative misalignment, structural cash decay, or expansion friction.\n\nTell me:\n- What scaling bottleneck or pipeline disruption are you navigating?\n- Is your current puzzle centered on *venture narratives* (story, raises), *commerce metrics* (logistics, margin), or *expansion corridors* (where to scale)?\n\nLet's organize the variables and identify your highest-leverage trajectory.`;
   };
 
   if (!ai) {
@@ -60,10 +60,10 @@ app.post("/api/clarity", async (req, res) => {
   }
 
   try {
-    const systemInstruction = `You are simulated Jimmy Manalel: Co-founder of Plantshop.ae (Middle East marketplace backed by 500 Global), Startup Advisor, and Ecosystem Builder between UAE and India.
-Your tone is highly practical, professional, direct, constructive, and empathetic but absolutely anti-fluff. You hate generic textbook business theory ("You need to do marketing"). You focus on execution, cash-flow reality, storytelling narrative clarity, and operational details.
-Use your real background (banking career exit, co-founding Plantshop in 2015, UAE marketplace operations, logistics, fundraising experiences, accelerator learning) to advise early-stage startup founders.
-Deliver answers formatted in elegant Markdown. Keep your replies structured, concise, and highly useful. Always sign off or frame responses in Jimmy's direct coaching style (e.g., “Let’s cut the noise and execute”, “Speak sharply, move decisively”).`;
+    const systemInstruction = `You are simulated Jimmy Manalel: a cross-border startup operator, global venture corridor builder, and co-founder of Plantshop.ae (pioneering GCC e-commerce marketplace backed by 500 Global).
+    Your tone is highly strategic, institutional, authoritative, yet founder-centric and deeply trusted. You avoid overly dramatic combat metaphors ("tactical warfare", "sparring style"). Instead, focus on institutional terms: value-chain optimization, corridor access, market expansion architecture, unit-economic resilience, and narrative gravity.
+    Provide advice to tech founders, scaling operators, and capital allocators looking to navigate cross-border corridors (including GCC, India, and global venture hubs). Focus on structural scalability, data room readiness, fundraising presentation logic, supply chain warehousing, and regulatory market validation.
+    Never use low-yield consulting templates. Deliver highly tailored, customized, first-principles advice in structured, concise, elegant Markdown. Always frame recommendations with direct, calm, and sovereign operator authority (e.g., “Let's center the economics and build structural pathways”, “Align the story, optimize the corridor”).`;
 
     const contents = [];
     if (chatHistory && Array.isArray(chatHistory)) {
@@ -129,18 +129,18 @@ app.post("/api/pitch-grader", async (req, res) => {
   }
 
   try {
-    const prompt = `Analyze this startup pitch deck details and grade it:
+    const prompt = `Analyze this startup pitch details and grade it:
 Startup Name: ${name || "Untitled"}
-Elevator Pitch: ${pitch}
-Target Customer & Problem: ${targetUser || "Not clearly defined"}
-Business Model & Monetization: ${businessModel || "Not clearly defined"}
-GCC Expansion interest: ${gccOpportunity || "Not specified"}
+Primary Narrative & Value Prop: ${pitch}
+Target Market segments & Bottlenecks: ${targetUser || "Not clearly defined"}
+Business Model & Sourcing Economics: ${businessModel || "Not clearly defined"}
+GCC Corridor Alignment: ${gccOpportunity || "Not specified"}
 
-Evaluate this strictly from the perspective of Jimmy Manalel: an active startup advisor, 500 Global-backed founder, with direct experience building UAE marketplaces and advising emerging market founders. Give incredibly high-value, direct, honest feedback. Don't be afraid to give average grades if the details are vague or lacking.`;
+Evaluate this strictly from the perspective of Jimmy Manalel: a global venture ecosystem operator, cross-border corridor strategist, and 500 Global portfolio co-founder. Grade with institutional rigor based on storytelling gravity, operational viability, logistics resilience, and capital readiness. Don't be afraid to assign conservative score vectors if fundamentals are vague.`;
 
-    const systemInstruction = `You are Jimmy Manalel, a seasoned startup mentor and cofounder of Plantshop.ae. 
-You grade pitches honestly, focusing on storytelling clarity, operational feasibility, and transactional realism. 
-Provide your response strictly as a JSON object matching the requested schema. Ensure the advice is direct, practical, and highly customized to their specific startup pitch inputs.`;
+    const systemInstruction = `You are Jimmy Manalel, a cross-border startup operator and co-founder of Plantshop.ae. 
+You analyze and grade venture narratives with highly institutional rigor, evaluating market expansion logic, commerce unit economics, corridor speed-to-contract, and fundraising storytelling cohesion.
+Ensure your advice is strategic, direct, practical, and highly specialized to their specific startup pitch inputs, keeping recommendations calm, authoritative, and trusted. Provide the output strictly as a JSON object matching the schema.`;
 
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash",
@@ -198,6 +198,90 @@ Provide your response strictly as a JSON object matching the requested schema. E
   } catch (error) {
     console.error("Gemini Pitch Grader error:", error);
     return res.json(getFallbackGrader());
+  }
+});
+
+
+// 3. API Endpoint: HubSpot Integration Status
+app.get("/api/hubspot/status", (req, res) => {
+  const isConfigured = !!process.env.HUBSPOT_ACCESS_TOKEN;
+  return res.json({
+    connected: isConfigured,
+    message: isConfigured 
+      ? "HubSpot CRM is configured and live on this corridor application." 
+      : "HubSpot token not found. Inactive fallback mode is running.",
+    apiEndpoint: "https://api.hubapi.com/crm/v3/objects/contacts"
+  });
+});
+
+// 4. API Endpoint: HubSpot Lead Sync
+app.post("/api/hubspot/sync", async (req, res) => {
+  const { email, firstname, lastname, company, message, source, details } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: "Email is required for HubSpot contact creation" });
+  }
+
+  const token = process.env.HUBSPOT_ACCESS_TOKEN;
+
+  // Track the raw payload we construct
+  const hubspotPayload = {
+    properties: {
+      email: email,
+      firstname: firstname || "Founder",
+      lastname: lastname || "User",
+      company: company || "Unspecified Venture",
+      message: message || "No custom message provided.",
+      hs_lead_status: "NEW",
+      description: `Synced from Jimmy Manalel Strategic Advisor Platform (${source || "General submission"}). ${details || ""}`
+    }
+  };
+
+  if (!token) {
+    // Return a rich dry-run simulation payload so the user can verify the integration payload
+    return res.json({
+      success: true,
+      dryRun: true,
+      message: "Lead successfully captured in local workspace. HubSpot Access Token is missing in environment variables, so CRM sync was bypassed.",
+      payloadSent: hubspotPayload
+    });
+  }
+
+  try {
+    const apiResponse = await fetch("https://api.hubapi.com/crm/v3/objects/contacts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(hubspotPayload)
+    });
+
+    if (!apiResponse.ok) {
+      const errorText = await apiResponse.text();
+      console.error("HubSpot API error response:", errorText);
+      return res.status(apiResponse.status).json({
+        success: false,
+        error: `HubSpot API returned status ${apiResponse.status}`,
+        details: errorText
+      });
+    }
+
+    const data = await apiResponse.json();
+    return res.json({
+      success: true,
+      dryRun: false,
+      contactId: data.id,
+      message: "Contact successfully synchronized on HubSpot portal.",
+      rawResponse: data
+    });
+  } catch (error: any) {
+    console.error("Critical HubSpot synchronization failure:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to connect to HubSpot servers.",
+      details: error.message || error
+    });
   }
 });
 

@@ -10,6 +10,7 @@ export interface PitchInput {
   businessModel: string;
   gccOpportunity: string;
   currentTraction: string;
+  email?: string;
 }
 
 export interface PitchGradeResult {

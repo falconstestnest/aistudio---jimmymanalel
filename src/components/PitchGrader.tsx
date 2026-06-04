@@ -15,7 +15,8 @@ export default function PitchGrader() {
     targetUser: "",
     businessModel: "",
     gccOpportunity: "interested",
-    currentTraction: ""
+    currentTraction: "",
+    email: ""
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +49,61 @@ export default function PitchGrader() {
 
     setIsLoading(true);
     setResult(null);
+
+    // HubSpot Automatic Sync Payload
+    const syncPayload = {
+      email: inputs.email || "grader-lead@example.com",
+      firstname: inputs.name ? inputs.name.split(" ")[0] : "Founder",
+      lastname: inputs.name ? inputs.name.split(" ").slice(1).join(" ") : "Grader User",
+      company: inputs.name || "Grader Venture",
+      message: `Elevator Pitch: ${inputs.pitch}`,
+      source: "Narrative Diagnostic Grader",
+      details: `Target: ${inputs.targetUser || "Unspecified"}. Model: ${inputs.businessModel || "Unspecified"}. GCC plan: ${inputs.gccOpportunity || "Unspecified"}. Traction: ${inputs.currentTraction || "Unspecified"}.`
+    };
+
+    // 1. Process HubSpot Server-Side Sync
+    fetch("/api/hubspot/sync", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(syncPayload)
+    })
+      .then(res => res.json())
+      .then(syncData => {
+        console.log("Automatic HubSpot grader synchronization response:", syncData);
+        
+        // Log client-side sandbox feedback
+        const conversionLogs = localStorage.getItem("jimmy_conversion_logs");
+        let parsedLogs = [];
+        if (conversionLogs) {
+          try { parsedLogs = JSON.parse(conversionLogs); } catch (err) {}
+        }
+        const newLog = {
+          id: Math.random().toString(),
+          time: new Date().toLocaleTimeString(),
+          action: syncData.dryRun 
+            ? `HubSpot dry-run grading sync: ${inputs.email}`
+            : `HubSpot live contact synced from grader successfully: ${inputs.email}`,
+          status: "success" as const,
+          payload: syncData.payloadSent || syncData.rawResponse
+        };
+        localStorage.setItem("jimmy_conversion_logs", JSON.stringify([newLog, ...parsedLogs].slice(0, 8)));
+      })
+      .catch(err => {
+        console.error("HubSpot grader automatic sync error:", err);
+      });
+
+    // 2. Process Google Ads DataLayer Trigger
+    if (typeof window !== "undefined") {
+      const storedGadsId = localStorage.getItem("jimmy_gads_measurement_id") || "";
+      (window as any).dataLayer = (window as any).dataLayer || [];
+      (window as any).dataLayer.push({
+        event: "lead_form_conversion",
+        gads_id: storedGadsId || "unsigned_corridor_grader_lead",
+        conversion_value: 0.00
+      });
+    }
 
     try {
       const response = await fetch("/api/pitch-grader", {
@@ -123,7 +179,7 @@ export default function PitchGrader() {
           Readiness Review
         </span>
         <h2 className="text-3xl font-sans font-bold tracking-tight text-white mt-2">
-          Pitch Story & VC <span className="serif-italic text-amber-500">Readiness Grader</span>
+          Startup Deck <span className="serif-italic text-amber-500">Grader</span>
         </h2>
         <p className="text-zinc-400 text-sm md:text-base mt-2 max-w-2xl leading-relaxed">
           Submit your concept block. Our advisory algorithm grades your core narrative, business logic, and operational readiness, delivering direct feedback based on Jimmy's real-world investor experience.
@@ -145,14 +201,31 @@ export default function PitchGrader() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold text-zinc-355 mb-1.5" htmlFor="startup-name">
-                    Startup or Project Name
+                    Startup or Project Name *
                   </label>
                   <input
                     type="text"
+                    required
                     id="startup-name"
                     name="name"
                     placeholder="e.g., Plantshop Ecosystems, GreenRoute Care"
                     value={inputs.name}
+                    onChange={handleInputChange}
+                    className="w-full bg-[#050505] border border-[#1f1f1f] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-500 focus:bg-zinc-950 transition-all placeholder-zinc-650"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-zinc-355 mb-1.5" htmlFor="founder-email">
+                    Founder Contact Email *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    id="founder-email"
+                    name="email"
+                    placeholder="e.g., founder@startup.com"
+                    value={inputs.email}
                     onChange={handleInputChange}
                     className="w-full bg-[#050505] border border-[#1f1f1f] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-amber-500 focus:bg-zinc-950 transition-all placeholder-zinc-650"
                   />

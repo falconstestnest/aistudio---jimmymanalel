@@ -82,7 +82,7 @@ export default function ClarityAssistant() {
     {
       id: "welcome",
       role: "model",
-      text: "### Welcome to the Founder Clarity Workspace\n\nI built Plantshop.ae from scratch and backed it up with 500 Global accelerator lessons. I work with founders who are serious about narrative grit and logistics survival.\n\nTell me, **where are you stuck right now?** Is it co-founder alignments, fundraising stories, or marketplace logistics bleed?\n\nLet's cut the noise and map your next move.",
+      text: "### Welcome to the Strategic Venture Corridor Sandbox\n\nI operate at the intersection of startup expansion corridors, institutional narratives, and marketplace platforms. I leverage my journey co-founding Plantshop.ae and working with 500 Global backed cohorts to help founders navigate structural scale, corridor entry, and investor readiness.\n\nWhere is your venture positioning stuck right now? Is it co-founder strategic alignment, cross-border fundraising pathways, or commerce unit-economics bleed?\n\nLet's map your next critical trajectory.",
       timestamp: new Date()
     }
   ]);
@@ -94,20 +94,20 @@ export default function ClarityAssistant() {
 
   const starterPrompts = [
     {
-      label: "Validate my marketplace idea",
-      prompt: "I want to build a localized high-margin marketplace. What are Jimmy's three crucial rules for first-mile coordination and logistics control?"
+      label: "Structure expansion gateways",
+      prompt: "What are the core operational de-risking frameworks for scaling hardware or platform economics from India into GCC venture corridors?"
     },
     {
-      label: "Co-founder equity divisions",
-      prompt: "We are dividing equity between 3 cofounders. We are having arguments on technical vs sales contributions. What's Jimmy's direct advice?"
+      label: "Resolve team alignment gaps",
+      prompt: "We are navigating co-founder split debates around cross-border asset transfers vs local execution weight. What is your framework?"
     },
     {
-      label: "Pitch deck narrative trap",
-      prompt: "What is the single biggest narrative trap founders fall into when writing their problem statement for VCs in Dubai / UAE?"
+      label: "De-risk fundraising narratives",
+      prompt: "What are the primary structural narrative traps founders fall into when presenting their unit economics to global capital syndicates?"
     },
     {
-      label: "E-commerce scale-up loop",
-      prompt: "We want to scale our orders from 10 to 100/day. Logistics SLA is breaking down. How do we triage operations?"
+      label: "Optimize commerce logistics",
+      prompt: "Our multi-node fulfillment is eroding margins because of delivery SLA deviations. How do we restructure cold-chain or warehouse loops?"
     }
   ];
 
@@ -211,20 +211,20 @@ export default function ClarityAssistant() {
           <div>
             <div className="flex items-center gap-1.5">
               <h3 className="font-sans font-bold text-base md:text-lg text-white">
-                Cofounder Clarity Assistant
+                Cofounder Clarity Dialogue
               </h3>
               <span className="bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2 py-0.5 rounded text-[10px] font-mono tracking-wider uppercase font-semibold">
-                ACTIVE
+                SANDBOX ACTIVE
               </span>
             </div>
             <p className="text-zinc-400 text-xs md:text-sm mt-0.5">
-              Instant practical coaching from co-founder of Plantshop.ae and 500 Global alumnus
+              Strategic corridor guidance backed by 500 Global and regional marketplace execution
             </p>
           </div>
         </div>
         <div className="hidden md:flex items-center gap-2 text-zinc-500 font-mono text-xs">
-          <MessageCircle className="w-4 h-4 text-amber-550" />
-          <span>Interactive Sparring Partner</span>
+          <MessageCircle className="w-4 h-4 text-amber-500" />
+          <span>Strategic Corridor Access Gateway</span>
         </div>
       </div>
 
@@ -311,7 +311,7 @@ export default function ClarityAssistant() {
           id="clarity-chat-input"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Ask about marketplace logistics, Dubai expansion, or VC pitches..."
+          placeholder="Ask about marketplace unit economics, GCC expansion corridors, or venture narratives..."
           className="flex-1 bg-[#050505] border border-[#1f1f1f] rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
         />
         <button
