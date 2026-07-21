@@ -33,7 +33,7 @@ const TOOLS: Array<{
     key: "commerce-infrastructure-audit",
     to: ROUTES.commerceAudit,
     id: "tab-select-calculator",
-    label: "03. Infrastructure Analytics",
+    label: "03. Commerce Infrastructure Audit",
     icon: <Calculator className="w-4 h-4 flex-shrink-0" aria-hidden="true" />,
   },
 ];

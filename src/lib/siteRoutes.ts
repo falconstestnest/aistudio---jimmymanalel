@@ -21,6 +21,7 @@ export const ROUTES = {
   investorNarrative: "/investor-narrative",
   ventureCorridors: "/venture-corridors",
   commerceInfrastructure: "/commerce-infrastructure",
+  asiaGcc: "/asia-gcc",
   privacy: "/privacy",
 } as const;
 
@@ -41,6 +42,7 @@ export const APPROVED_PATHS: readonly string[] = [
   ROUTES.investorNarrative,
   ROUTES.ventureCorridors,
   ROUTES.commerceInfrastructure,
+  ROUTES.asiaGcc,
   ROUTES.privacy,
 ];
 
@@ -83,7 +85,7 @@ export const LEGACY_HASH_REDIRECTS: Record<string, string> = {
   "strategy-conversation": ROUTES.strategyConversation,
   "advisory-enquiry": ROUTES.advisory,
   "partnership-enquiry": ROUTES.partnerships,
-  "journey-header": ROUTES.about,
+  // journey-header remains a live homepage anchor — do not redirect away
 };
 
 export type RouteSeo = {
@@ -199,6 +201,14 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
       "Commerce infrastructure for founders: unit economics, fulfilment, logistics, inventory, margins, and cross-border operational scalability.",
     robots: "index, follow",
     h1: "Commerce infrastructure review",
+  },
+  [ROUTES.asiaGcc]: {
+    path: ROUTES.asiaGcc,
+    title: "Asia–GCC Venture Corridors | Jimmy Manalel",
+    description:
+      "Operator-led market-entry, founder-readiness and ecosystem strategy connecting startups and investors across Singapore, Malaysia, Thailand, South Korea, India and the GCC.",
+    robots: "index, follow",
+    h1: "Commercial pathways between Asia and the GCC",
   },
   [ROUTES.privacy]: {
     path: ROUTES.privacy,

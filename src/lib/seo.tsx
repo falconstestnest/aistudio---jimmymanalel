@@ -56,25 +56,48 @@ export function RouteSeo() {
   return null;
 }
 
-/** After client navigation, move focus to the primary H1 when present. */
+/**
+ * After client navigation: focus primary H1 when no hash, otherwise scroll to the
+ * hash target below the sticky header. Never force scroll-to-top when a hash is present
+ * (that broke /asia-gcc#audit and footer section links).
+ */
 export function RouteFocusManager() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const h1 = document.querySelector("main h1") as HTMLElement | null;
-    if (!h1) return;
-    if (!h1.hasAttribute("tabindex")) {
+    if (h1 && !h1.hasAttribute("tabindex")) {
       h1.setAttribute("tabindex", "-1");
     }
-    // Avoid stealing focus on first paint of a full page load with hash legacy redirect
-    const prefersReduced =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!prefersReduced) {
+
+    const id = hash.replace(/^#/, "").trim();
+    if (id) {
+      let cancelled = false;
+      const scrollToTarget = () => {
+        if (cancelled) return;
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.scrollIntoView({ behavior: "auto", block: "start" });
+      };
+      // Double rAF + short timeout covers paint after route transition / hydration.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(scrollToTarget);
+      });
+      const t = window.setTimeout(scrollToTarget, 50);
+      return () => {
+        cancelled = true;
+        window.clearTimeout(t);
+      };
+    }
+
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (h1 && !prefersReduced) {
       h1.focus({ preventScroll: true });
     }
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [pathname, hash]);
 
   return null;
 }

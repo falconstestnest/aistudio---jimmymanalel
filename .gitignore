@@ -11,3 +11,10 @@ coverage/
 # Unverified local asset — do not commit until ownership/use is confirmed
 Jimmy headshot .JPG
 .vercel
+
+# Temporary local QA artefacts (screenshots, one-off browser scripts)
+qa-screenshots/
+scripts/qa-*.mjs
+playwright-report/
+test-results/
+blob-report/

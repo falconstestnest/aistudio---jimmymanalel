@@ -16,6 +16,12 @@ export const PERSON_NAME = "Jimmy Manalel";
 export const PERSON_JOB_TITLE =
   "Venture Corridor Builder and Cross-Border Startup Strategist";
 
+export const CORRIDOR_SCOPE_STATEMENT =
+  "Building commercial pathways between Southeast Asia, South Korea, India and the GCC.";
+
+export const ASIA_FOCUS_LINE =
+  "Current corridor focus: Singapore, Malaysia, Thailand and South Korea.";
+
 export const PERSON_DESCRIPTION_SHORT =
   "Jimmy Manalel is a venture corridor builder and cross-border startup strategist working with founders, startup ecosystems, and market-entry networks across India, the GCC, and the Middle East.";
 
@@ -40,6 +46,8 @@ export const KNOWS_ABOUT = [
   "Founder mentorship",
   "Startup ecosystem development",
   "Founder communities",
+  "Asia–GCC market entry",
+  "Cross-border commercial pathways",
 ] as const;
 
 export const SAME_AS = ["https://www.linkedin.com/in/planterjimmy"] as const;
