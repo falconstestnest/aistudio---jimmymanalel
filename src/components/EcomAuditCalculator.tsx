@@ -186,7 +186,9 @@ export default function EcomAuditCalculator() {
               <div className="flex justify-between items-center text-xs text-zinc-350 font-medium mb-1.5">
                 <span className="flex items-center gap-1">
                   Average Order Value (AOV)
-                  <HelpCircle className="w-3 h-3 text-zinc-500" title="The average price a customer paid at checkout." />
+                  <span title="The average price a customer paid at checkout." className="inline-flex">
+                    <HelpCircle className="w-3 h-3 text-zinc-500" aria-hidden="true" />
+                  </span>
                 </span>
                 <span className="font-mono text-amber-500 bg-[#050505] border border-[#1f1f1f] px-2.5 py-0.5 rounded font-bold">
                   {metrics.avgOrderValue} AED

@@ -6,6 +6,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Briefcase, Milestone, Award, Users, AlertCircle, Sparkles } from "lucide-react";
+import { motionInitial } from "../utils/motion";
 
 interface TimelineEvent {
   year: string;
@@ -139,7 +140,7 @@ export default function AboutTimeline() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeEventIndex}
-              initial={{ opacity: 0, y: 15 }}
+              initial={motionInitial({ opacity: 0, y: 15 })}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}

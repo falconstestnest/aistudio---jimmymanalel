@@ -21,7 +21,14 @@ export default function GrowthMarketingHub() {
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
   const [checkingStatus, setCheckingStatus] = useState<boolean>(true);
   const [statusMessage, setStatusMessage] = useState<string>("");
-  const [gadsId, setGadsId] = useState<string>(() => localStorage.getItem("jimmy_gads_measurement_id") || "");
+  const [gadsId, setGadsId] = useState<string>(() => {
+    if (typeof window === "undefined" || typeof localStorage === "undefined") return "";
+    try {
+      return localStorage.getItem("jimmy_gads_measurement_id") || "";
+    } catch {
+      return "";
+    }
+  });
   const [testLogs, setTestLogs] = useState<Array<{ id: string; time: string; action: string; status: "success" | "warning"; payload?: any }>>([]);
   
   // Test Sync form fields
@@ -241,7 +248,7 @@ export default function GrowthMarketingHub() {
                 <div className="text-zinc-500 text-[11px] leading-relaxed flex gap-2 pt-1 border-t border-[#1f1f1f] mt-2">
                   <ShieldAlert className="w-4 h-4 text-amber-500 flex-shrink-0" />
                   <span>
-                    To activate <strong>live HubSpot synchronization</strong>, enter your Private App Access Token as <code className="bg-zinc-900 text-amber-500 px-1 py-0.5 rounded font-mono">HUBSPOT_ACCESS_TOKEN</code> inside your AI Studio Workspace Secrets panel.
+                    To activate <strong>live HubSpot synchronization</strong>, set the Private App Access Token as <code className="bg-zinc-900 text-amber-500 px-1 py-0.5 rounded font-mono">HUBSPOT_ACCESS_TOKEN</code> in Vercel Project Settings → Environment Variables (Production), then redeploy.
                   </span>
                 </div>
               )}
@@ -522,8 +529,8 @@ export default function GrowthMarketingHub() {
               <a 
                 href="https://developers.hubspot.com/" 
                 target="_blank" 
-                rel="noreferrer"
-                className="text-amber-500 hover:text-amber-400 font-medium flex items-center gap-1"
+                rel="noopener noreferrer"
+                className="text-amber-500 hover:text-amber-400 font-medium flex items-center gap-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded"
               >
                 <span>HubSpot Doc Portal</span>
                 <ExternalLink className="w-3 h-3" />

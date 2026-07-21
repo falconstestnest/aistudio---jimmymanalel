@@ -30,9 +30,17 @@ import PitchGrader from "./components/PitchGrader";
 import EcomAuditCalculator from "./components/EcomAuditCalculator";
 import BookingForm from "./components/BookingForm";
 import GrowthMarketingHub from "./components/GrowthMarketingHub";
+import NotFoundPage, { isHomePath } from "./components/NotFoundPage";
+import { motionInitial } from "./utils/motion";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<"chat" | "grader" | "calculator" | "growth">("chat");
+
+  // Defensive client-side guard. Production unknown paths are handled by public/404.html
+  // with a true HTTP 404. This only renders if the SPA shell is served for a non-home path.
+  if (typeof window !== "undefined" && !isHomePath(window.location.pathname)) {
+    return <NotFoundPage />;
+  }
 
   const services = [
     {
@@ -75,7 +83,10 @@ export default function App() {
   const handleSmoothScroll = (elementId: string) => {
     const el = document.getElementById(elementId);
     if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+      const prefersReduced =
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth" });
     }
   };
 
@@ -86,13 +97,28 @@ export default function App() {
     }, 50);
   };
 
+  const handleSectionNav = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    elementId: string
+  ) => {
+    event.preventDefault();
+    handleSmoothScroll(elementId);
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", `#${elementId}`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#050505] text-zinc-300 font-sans selection:bg-amber-500 selection:text-black antialiased">
       
       {/* 1. Header Navigation Bar */}
       <header className="sticky top-0 bg-[#050505]/80 backdrop-blur-md border-b border-[#1f1f1f] z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <a
+            href="/"
+            className="flex items-center gap-3 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
+            aria-label="Jimmy Manalel homepage"
+          >
             <div className="w-8 h-8 rounded-lg bg-amber-500 text-black flex items-center justify-center font-display font-bold text-sm">
               JM
             </div>
@@ -101,28 +127,32 @@ export default function App() {
                 Jimmy Manalel
               </span>
               <span className="text-[10px] font-mono text-amber-500 block mt-0.5 uppercase tracking-wider font-semibold">
-                Founder • Venture Ecosystem Builder • Cross-Border Startup Strategist
+                Venture Corridor Builder · Cross-Border Startup Strategist
               </span>
             </div>
-          </div>
+          </a>
 
-          <nav className="hidden xl:flex items-center gap-5 text-xs sm:text-sm font-medium text-zinc-400 font-sans">
-            <button onClick={() => handleSmoothScroll("journey-header")} className="hover:text-white transition cursor-pointer">About</button>
-            <button onClick={() => handleSmoothScroll("ecosystem-engagement")} className="hover:text-white transition cursor-pointer">Ecosystem</button>
-            <button onClick={() => handleSmoothScroll("services-header")} className="hover:text-white transition cursor-pointer">Pathways</button>
-            <button onClick={() => handleNavToTab("chat")} className="hover:text-white transition cursor-pointer">Dialogue</button>
-            <button onClick={() => handleNavToTab("grader")} className="hover:text-white transition cursor-pointer">Narrative Grader</button>
-            <button onClick={() => handleNavToTab("calculator")} className="hover:text-white transition cursor-pointer">Analytics</button>
-            <button onClick={() => handleNavToTab("growth")} className="hover:text-white transition cursor-pointer text-amber-500 font-semibold">Growth & Leads</button>
+          <nav
+            className="hidden xl:flex items-center gap-5 text-xs sm:text-sm font-medium text-zinc-400 font-sans"
+            aria-label="Primary"
+          >
+            <a href="#journey-header" onClick={(e) => handleSectionNav(e, "journey-header")} className="hover:text-white transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded">About</a>
+            <a href="#ecosystem-engagement" onClick={(e) => handleSectionNav(e, "ecosystem-engagement")} className="hover:text-white transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded">Ecosystem</a>
+            <a href="#services-header" onClick={(e) => handleSectionNav(e, "services-header")} className="hover:text-white transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded">Pathways</a>
+            <button type="button" onClick={() => handleNavToTab("chat")} className="hover:text-white transition cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded">Dialogue</button>
+            <button type="button" onClick={() => handleNavToTab("grader")} className="hover:text-white transition cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded">Narrative Grader</button>
+            <button type="button" onClick={() => handleNavToTab("calculator")} className="hover:text-white transition cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded">Analytics</button>
+            <button type="button" onClick={() => handleNavToTab("growth")} className="hover:text-white transition cursor-pointer text-amber-500 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded">Growth & Leads</button>
           </nav>
 
-          <button
-            onClick={() => handleSmoothScroll("booking-section")}
-            className="bg-amber-500 hover:bg-amber-400 text-black px-4 py-2 rounded-lg text-xs md:text-sm font-sans font-bold cursor-pointer shadow-md transition-all"
+          <a
+            href="#booking-section"
+            onClick={(e) => handleSectionNav(e, "booking-section")}
+            className="bg-amber-500 hover:bg-amber-400 text-black px-4 py-2 rounded-lg text-xs md:text-sm font-sans font-bold shadow-md transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
             id="header-booking"
           >
             Book Clarity Session
-          </button>
+          </a>
         </div>
       </header>
 
@@ -136,33 +166,41 @@ export default function App() {
           <div className="lg:col-span-8 space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-xs font-mono font-bold tracking-wider text-amber-500 uppercase">
               <Zap className="w-3 h-3 text-amber-500" />
-               Cross-Border Venture Corridors
+              Venture Corridor Builder
             </div>
             
             <h1 className="text-4xl md:text-5xl font-display font-medium text-white tracking-tight leading-tight">
-              Cross-border startup operator connecting <strong className="serif-italic text-amber-500 font-serif font-normal">founders, venture ecosystems,</strong> and market expansion pathways.
+              Venture corridor builder connecting <strong className="serif-italic text-amber-500 font-serif font-normal">founders, ecosystems,</strong> and market expansion pathways.
             </h1>
             
             <p className="text-zinc-400 font-sans text-sm md:text-base leading-relaxed max-w-3xl">
-              Founder of <strong>Plantshop.ae</strong> (pioneering GCC e-commerce platform and 500 Global portfolio startup) and cross-border ecosystem operator. I operate at the intersection of early-stage builders, capital networks, and market entry corridors — helping startups navigate fundraising narratives, optimize commerce infrastructure, and orchestrate expansion between the GCC, India, and global venture hubs.
+              Jimmy Manalel is a venture corridor builder and cross-border startup strategist. Founder of <strong>Plantshop.ae</strong> (pioneering GCC e-commerce platform and 500 Global portfolio startup), he works at the intersection of early-stage builders, capital networks, and market entry corridors — helping startups shape investor narratives, strengthen commerce infrastructure, and expand across the GCC, India, and global venture hubs.
             </p>
 
             <div className="flex flex-wrap gap-3 pt-2">
-              <button
-                onClick={() => handleSmoothScroll("workspace-hub")}
-                className="bg-amber-500 hover:bg-amber-400 text-black px-6 py-3 rounded-xl text-sm font-sans font-bold cursor-pointer inline-flex items-center gap-2 group transition"
+              <a
+                href="#workspace-hub"
+                onClick={(e) => handleSectionNav(e, "workspace-hub")}
+                className="bg-amber-500 hover:bg-amber-400 text-black px-6 py-3 rounded-xl text-sm font-sans font-bold inline-flex items-center gap-2 group transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
                 id="hero-launch-bot"
               >
                 <span>Launch Venture Workspace</span>
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition" />
-              </button>
-              <button
-                onClick={() => handleSmoothScroll("calculator-section")}
-                className="px-6 py-3 border border-[#1f1f1f] hover:bg-zinc-900 text-zinc-350 hover:text-white rounded-xl text-sm font-sans font-semibold cursor-pointer transition"
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition motion-reduce:transform-none" />
+              </a>
+              <a
+                href="#workspace-hub"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavToTab("calculator");
+                  if (typeof window !== "undefined") {
+                    window.history.replaceState(null, "", "#workspace-hub");
+                  }
+                }}
+                className="px-6 py-3 border border-[#1f1f1f] hover:bg-zinc-900 text-zinc-300 hover:text-white rounded-xl text-sm font-sans font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
                 id="hero-operations-calc"
               >
                 Analyze Store Economics
-              </button>
+              </a>
             </div>
           </div>
 
@@ -223,7 +261,7 @@ export default function App() {
         {/* 3. About & Interactive Timeline */}
         <section className="space-y-6">
           <div id="journey-header" className="scroll-mt-24 text-center">
-            <h3 className="text-sm font-mono text-zinc-500 font-bold uppercase tracking-wider">The Operator Track Record</h3>
+            <p className="text-sm font-mono text-zinc-500 font-bold uppercase tracking-wider">The Operator Track Record</p>
             <h2 className="text-3xl font-display font-semibold text-white mt-1">My Journey</h2>
           </div>
           <AboutTimeline />
@@ -442,7 +480,7 @@ export default function App() {
                 {activeTab === "chat" && (
                   <motion.div
                     key="chat"
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={motionInitial({ opacity: 0, y: 10 })}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
@@ -454,7 +492,7 @@ export default function App() {
                 {activeTab === "grader" && (
                   <motion.div
                     key="grader"
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={motionInitial({ opacity: 0, y: 10 })}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
@@ -466,7 +504,7 @@ export default function App() {
                 {activeTab === "calculator" && (
                   <motion.div
                     key="calculator"
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={motionInitial({ opacity: 0, y: 10 })}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
@@ -478,7 +516,7 @@ export default function App() {
                 {activeTab === "growth" && (
                   <motion.div
                     key="growth"
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={motionInitial({ opacity: 0, y: 10 })}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
@@ -509,7 +547,7 @@ export default function App() {
                 <span>Jimmy Manalel</span>
               </div>
               <p className="text-zinc-500 text-xs md:text-sm leading-relaxed max-w-sm">
-                Connecting founders, capital, and market expansion pathways across regional startup gateways and bilateral venture corridors.
+                Venture corridor builder and cross-border startup strategist connecting founders, capital, and market expansion pathways.
               </p>
             </div>
 
@@ -520,12 +558,24 @@ export default function App() {
               </h4>
               <div className="space-y-2 text-xs md:text-sm text-zinc-400">
                 <div className="flex items-center gap-2 hover:text-white transition">
-                  <Mail className="w-4 h-4 text-amber-550 flex-shrink-0" />
-                  <a href="mailto:jimmymanalel@gmail.com" className="hover:text-amber-500 transition">jimmymanalel@gmail.com</a>
+                  <Mail className="w-4 h-4 text-amber-500 flex-shrink-0" aria-hidden="true" />
+                  <a
+                    href="mailto:jimmymanalel@gmail.com"
+                    className="hover:text-amber-500 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded"
+                  >
+                    jimmymanalel@gmail.com
+                  </a>
                 </div>
                 <div className="flex items-center gap-2 hover:text-white transition">
-                  <Linkedin className="w-4 h-4 text-amber-550 flex-shrink-0" />
-                  <a href="https://linkedin.com/in/planterjimmy" target="_blank" rel="noreferrer" className="hover:text-amber-500 transition">LinkedIn: planterjimmy</a>
+                  <Linkedin className="w-4 h-4 text-amber-500 flex-shrink-0" aria-hidden="true" />
+                  <a
+                    href="https://www.linkedin.com/in/planterjimmy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-amber-500 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded"
+                  >
+                    LinkedIn: planterjimmy
+                  </a>
                 </div>
               </div>
             </div>

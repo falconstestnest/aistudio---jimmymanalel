@@ -5,6 +5,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { motionInitial } from "../utils/motion";
 import { Send, Sparkles, MessageCircle, ArrowRight, ShieldAlert, CheckCircle2 } from "lucide-react";
 import { ChatMessage } from "../types";
 
@@ -168,7 +169,7 @@ export default function ClarityAssistant() {
       setMessages((prev) => [...prev, newModelMessage]);
     } catch (error) {
       console.error("Clarity Assistant API failure:", error);
-      setErrorStatus("Connection timeout. I will respond using Jimmy's default offline mentorship engine.");
+      setErrorStatus("The connection paused. This page could not retrieve everything it needed — continuing with the offline advisory engine.");
       
       // Fallback response simulation
       setTimeout(() => {
@@ -235,7 +236,7 @@ export default function ClarityAssistant() {
           return (
             <motion.div
               key={message.id}
-              initial={{ opacity: 0, x: isModel ? -10 : 10 }}
+              initial={motionInitial({ opacity: 0, x: isModel ? -10 : 10 })}
               animate={{ opacity: 1, x: 0 }}
               className={`flex ${isModel ? "justify-start" : "justify-end"}`}
             >
