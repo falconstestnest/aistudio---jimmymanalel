@@ -11,11 +11,11 @@ import EmailResultsCapture from "./leads/EmailResultsCapture";
 
 export default function EcomAuditCalculator() {
   const [metrics, setMetrics] = useState<EcomMetrics>({
-    avgOrderValue: 180, // AED
+    avgOrderValue: 180, // USD
     monthlyOrders: 800,
     cogsPercent: 35, // 35%
-    deliveryCost: 35, // AED per order
-    cac: 40, // AED Customer Acquisition Cost
+    deliveryCost: 35, // USD per order
+    cac: 40, // USD Customer Acquisition Cost
     repeatPurchaseRate: 15 // 15%
   });
 
@@ -192,7 +192,7 @@ export default function EcomAuditCalculator() {
                   </span>
                 </span>
                 <span className="font-mono text-amber-500 bg-[#050505] border border-[#1f1f1f] px-2.5 py-0.5 rounded font-bold">
-                  {metrics.avgOrderValue} AED
+                  {metrics.avgOrderValue} USD
                 </span>
               </div>
               <input
@@ -206,9 +206,9 @@ export default function EcomAuditCalculator() {
                 onChange={(e) => handleSliderChange("avgOrderValue", Number(e.target.value))}
               />
               <div className="flex justify-between text-[10px] text-zinc-500 font-mono mt-1">
-                <span>50 AED</span>
-                <span>275 AED</span>
-                <span>500 AED</span>
+                <span>50 USD</span>
+                <span>275 USD</span>
+                <span>500 USD</span>
               </div>
             </div>
 
@@ -217,7 +217,7 @@ export default function EcomAuditCalculator() {
               <div className="flex justify-between items-center text-xs text-zinc-350 font-medium mb-1.5">
                 <span>Last-Mile Delivery Cost</span>
                 <span className={`font-mono px-2.5 py-0.5 rounded font-bold ${calculations.logisticsRatio > 20 ? "bg-red-950/40 text-red-450 border border-red-900/30" : "bg-[#050505] text-amber-500 border border-[#1f1f1f]"}`}>
-                  {metrics.deliveryCost} AED
+                  {metrics.deliveryCost} USD
                 </span>
               </div>
               <input
@@ -231,9 +231,9 @@ export default function EcomAuditCalculator() {
                 onChange={(e) => handleSliderChange("deliveryCost", Number(e.target.value))}
               />
               <div className="flex justify-between text-[10px] text-zinc-500 font-mono mt-1">
-                <span>10 AED</span>
-                <span>45 AED</span>
-                <span>80 AED</span>
+                <span>10 USD</span>
+                <span>45 USD</span>
+                <span>80 USD</span>
               </div>
             </div>
 
@@ -242,7 +242,7 @@ export default function EcomAuditCalculator() {
               <div className="flex justify-between items-center text-xs text-zinc-350 font-medium mb-1.5">
                 <span>CAC (Acquisition Spend)</span>
                 <span className="font-mono text-amber-500 bg-[#050505] border border-[#1f1f1f] px-2.5 py-0.5 rounded font-bold">
-                  {metrics.cac} AED
+                  {metrics.cac} USD
                 </span>
               </div>
               <input
@@ -256,9 +256,9 @@ export default function EcomAuditCalculator() {
                 onChange={(e) => handleSliderChange("cac", Number(e.target.value))}
               />
               <div className="flex justify-between text-[10px] text-zinc-500 font-mono mt-1">
-                <span>5 AED</span>
-                <span>75 AED</span>
-                <span>150 AED</span>
+                <span>5 USD</span>
+                <span>75 USD</span>
+                <span>150 USD</span>
               </div>
             </div>
 
@@ -379,7 +379,7 @@ export default function EcomAuditCalculator() {
                 </span>
                 <div className="flex items-baseline gap-1 mt-1">
                   <span className="text-xl md:text-2xl font-sans font-black">
-                    {calculations.monthlyNetProfit < 0 ? "" : "+"}{calculations.monthlyNetProfit.toLocaleString()} AED
+                    {calculations.monthlyNetProfit < 0 ? "" : "+"}{calculations.monthlyNetProfit.toLocaleString()} USD
                   </span>
                 </div>
               </div>
@@ -445,7 +445,7 @@ export default function EcomAuditCalculator() {
 
                 {/* Y-Axis scale comments */}
                 <text x="10" y={paddingTop + 4} fontSize="8" fontFamily="monospace" fill="#52525b">12-Mo High</text>
-                <text x="10" y={height - paddingBottom + 4} fontSize="8" fontFamily="monospace" fill="#52525b">0 AED</text>
+                <text x="10" y={height - paddingBottom + 4} fontSize="8" fontFamily="monospace" fill="#52525b">0 USD</text>
               </svg>
             </div>
           </div>
@@ -484,7 +484,7 @@ export default function EcomAuditCalculator() {
           <EmailResultsCapture
             toolUsed="Commerce Infrastructure Analytics"
             assessmentScore={`${calculations.ltvToCacRatio.toFixed(1)}x LTV:CAC`}
-            assessmentSummary={`${advisoryTake.title}. Monthly net ${calculations.monthlyNetProfit.toLocaleString()} AED. Logistics ${calculations.logisticsRatio.toFixed(1)}% of AOV. ${advisoryTake.text}`}
+            assessmentSummary={`${advisoryTake.title}. Monthly net ${calculations.monthlyNetProfit.toLocaleString()} USD. Logistics ${calculations.logisticsRatio.toFixed(1)}% of AOV. ${advisoryTake.text}`}
             serviceInterest="Commerce Infrastructure Review"
             componentSource="ecom-audit-calculator"
           />

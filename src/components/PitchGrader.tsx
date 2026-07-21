@@ -96,7 +96,7 @@ export default function PitchGrader() {
           "Conduct 10 manual customer interviews in the next 14 days to validate that they actually suffer from this bottleneck.",
           "If exploring the GCC, formulate your local entry strategy with relationship builders, rather than broad corporate mail campaigns."
         ],
-        middleEastAdvisory: "UAE customer acquisition cost is highly competitive. For high-density localized models, design basket sizes above 150 AED or focus on corporate B2B integrations."
+        middleEastAdvisory: "UAE customer acquisition cost is highly competitive. For high-density localized models, design basket sizes above 150 USD or focus on corporate B2B integrations."
       };
 
       setTimeout(() => {
