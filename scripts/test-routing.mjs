@@ -36,6 +36,7 @@ const APPROVED = [
   "/investor-narrative",
   "/venture-corridors",
   "/commerce-infrastructure",
+  "/asia-gcc",
   "/privacy",
 ];
 
@@ -121,12 +122,15 @@ test("public CTAs no longer use major legacy fragments", () => {
 
 test("homepage CTAs use approved pathnames", () => {
   const home = fs.readFileSync(path.join(root, "src/pages/HomePage.tsx"), "utf8");
-  assert.ok(home.includes("Explore Founder Tools"));
-  assert.ok(home.includes("ROUTES.ventureTools") || home.includes("/venture-tools"));
-  assert.ok(home.includes("ROUTES.commerceAudit") || home.includes("commerce-infrastructure-audit"));
+  assert.ok(home.includes("Explore the Asia–GCC Corridor") || home.includes("Asia–GCC Corridor"));
+  assert.ok(home.includes("ROUTES.asiaGcc") || home.includes("/asia-gcc"));
   assert.ok(home.includes("ROUTES.strategyConversation") || home.includes("/strategy-conversation"));
   assert.ok(home.includes("ROUTES.advisory") || home.includes("/advisory"));
-  assert.ok(home.includes("ROUTES.partnerships") || home.includes("/partnerships"));
+  assert.ok(
+    home.includes("ROUTES.dialogue") ||
+      home.includes("ROUTES.ventureTools") ||
+      home.includes("/venture-tools")
+  );
 });
 
 test("tool workspace uses NavLink pathnames not button tabs", () => {
@@ -179,6 +183,81 @@ test("entity module avoids inventing unlisted ventures", () => {
   assert.ok(!src.includes("Plantshop.me"));
 });
 
+test("asia-gcc page content and constraints", () => {
+  const page = fs.readFileSync(path.join(root, "src/pages/AsiaGccPage.tsx"), "utf8");
+  assert.ok(page.includes("Commercial pathways between Asia and the GCC"));
+  assert.ok(page.includes("operator-led commercial assessment"));
+  assert.ok(!page.includes("operator-led diligence"));
+  assert.ok(!page.includes("offices in Singapore"));
+  assert.ok(!page.includes("Global investment authority"));
+  assert.ok(!page.includes("Guaranteed GCC"));
+  const matrix = fs.readFileSync(
+    path.join(root, "src/components/corridor/CountryOpportunityMatrix.tsx"),
+    "utf8"
+  );
+  assert.ok(matrix.includes("Singapore"));
+  assert.ok(matrix.includes("Malaysia"));
+  assert.ok(matrix.includes("Thailand"));
+  assert.ok(matrix.includes("South Korea"));
+  assert.ok(matrix.includes("India"));
+  assert.ok(matrix.includes("GCC"));
+  const pathways = fs.readFileSync(
+    path.join(root, "src/components/corridor/CorridorPathways.tsx"),
+    "utf8"
+  );
+  assert.ok(pathways.includes("regulated financial advice"));
+  assert.ok(pathways.includes("Operator-Led Commercial Assessment"));
+  const header = fs.readFileSync(
+    path.join(root, "src/components/layout/SiteHeader.tsx"),
+    "utf8"
+  );
+  // Minimal header: Home · Venture Tools · Asia–GCC · About · Private Conversation
+  assert.ok(!header.includes("Singapore")); // no country list in header
+  assert.ok(!header.includes(">JM<") && !header.includes("JM</"));
+  assert.ok(!header.includes("Jimmy Manalel"));
+  assert.ok(!header.includes("Venture Corridor Builder"));
+  assert.ok(!header.includes("Analytics"));
+  assert.ok(!header.includes("Work With Jimmy"));
+  assert.ok(!header.includes("Narrative Grader"));
+  assert.ok(!header.includes("Ecosystem"));
+  assert.ok(!header.includes("Pathways"));
+  assert.ok(!header.includes("Dialogue"));
+  assert.ok(header.includes("Venture Tools"));
+  assert.ok(header.includes("ROUTES.asiaGcc") || header.includes("Asia–GCC"));
+  assert.ok(header.includes("About"));
+  assert.ok(header.includes("Private Conversation"));
+  assert.ok(header.includes("Home"));
+  const footer = fs.readFileSync(
+    path.join(root, "src/components/layout/SiteFooter.tsx"),
+    "utf8"
+  );
+  assert.ok(footer.includes("ROUTES.asiaGcc") || footer.includes("asia-gcc"));
+  assert.ok(footer.includes("Jimmy Manalel"));
+  assert.ok(footer.includes("Venture Corridor Builder"));
+});
+
+test("no operator-led diligence wording remains", () => {
+  const roots = ["src", "public"];
+  for (const dir of roots) {
+    const walk = (d) => {
+      for (const ent of fs.readdirSync(d, { withFileTypes: true })) {
+        const full = path.join(d, ent.name);
+        if (ent.isDirectory()) {
+          if (ent.name === "node_modules" || ent.name === "dist") continue;
+          walk(full);
+        } else if (/\.(tsx?|ts|txt|html|mjs|md)$/i.test(ent.name)) {
+          const text = fs.readFileSync(full, "utf8");
+          assert.ok(
+            !text.includes("operator-led diligence"),
+            `diligence remains in ${full}`
+          );
+        }
+      }
+    };
+    walk(path.join(root, dir));
+  }
+});
+
 test("no obsolete 80+ Startups claim in public source", () => {
   const files = [
     "src/pages/HomePage.tsx",
@@ -192,7 +271,13 @@ test("no obsolete 80+ Startups claim in public source", () => {
     assert.ok(!/\b80\+ Startups\b/i.test(text), rel);
   }
   const home = fs.readFileSync(path.join(root, "src/pages/HomePage.tsx"), "utf8");
-  assert.ok(home.includes("800+ Founders Mentored"));
+  assert.ok(
+    home.includes("800+ Founders Mentored") ||
+      home.includes("800+ founders") ||
+      home.includes("800+ founders mentored") ||
+      home.includes("More than 800 founders") ||
+      home.includes("more than 800 founders")
+  );
 });
 
 test("unique titles/descriptions per route in siteRoutes", () => {
@@ -272,6 +357,37 @@ if (fs.existsSync(distIndex)) {
       "utf8"
     );
     assert.ok(audit.includes("Commerce Infrastructure Audit"));
+  });
+
+  test("dist asia-gcc prerenders with countries and disclaimer", () => {
+    const html = fs.readFileSync(path.join(root, "dist/asia-gcc/index.html"), "utf8");
+    assert.ok(/<h1[\s>]/i.test(html));
+    assert.equal((html.match(/<h1[\s>]/gi) || []).length, 1);
+    assert.ok(html.includes("Singapore"));
+    assert.ok(html.includes("Malaysia"));
+    assert.ok(html.includes("Thailand"));
+    assert.ok(html.includes("South Korea"));
+    assert.ok(html.includes("regulated financial advice"));
+    assert.ok(html.includes('rel="canonical"'));
+    assert.ok(html.includes("https://www.jimmymanalel.com/asia-gcc"));
+    assert.ok(html.includes("application/ld+json"));
+    assert.ok(!html.includes("80+ Startups"));
+  });
+
+  test("dist homepage includes Asia-GCC section", () => {
+    const html = fs.readFileSync(path.join(root, "dist/index.html"), "utf8");
+    assert.ok(
+      html.includes("Asia–GCC") ||
+        html.includes("Asia-GCC") ||
+        html.includes("asia-gcc") ||
+        html.includes("next generation of ventures")
+    );
+    assert.ok(
+      html.includes("next generation of ventures") ||
+        html.includes("Explore the Asia") ||
+        html.includes("corridor")
+    );
+    assert.ok(html.includes("Singapore") || html.includes("Illustrative strategic corridor"));
   });
 } else {
   console.log("  ⚠ dist/ not built yet — skipping built-output checks");

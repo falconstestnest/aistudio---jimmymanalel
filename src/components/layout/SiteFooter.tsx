@@ -1,133 +1,168 @@
 import React from "react";
 import { Link } from "react-router";
 import { Mail, Linkedin } from "lucide-react";
-import { PERSON_DESCRIPTION_SHORT } from "../../lib/entity";
 import { ROUTES } from "../../lib/siteRoutes";
 
-const subtleLink =
-  "text-zinc-500 hover:text-zinc-300 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded";
+const colTitle = "text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500 mb-3";
+const colLink =
+  "text-xs text-zinc-400 hover:text-zinc-200 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded";
 
+/**
+ * Editorial footer — primary home for identity and strategic navigation.
+ */
 export default function SiteFooter() {
   return (
-    <footer className="bg-[#0c0c0c] text-zinc-400 border-t border-[#1f1f1f] py-12 mt-16">
+    <footer className="bg-[#080808] text-zinc-400 border-t border-[#1f1f1f] py-14 mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-8 pb-8 border-b border-[#1f1f1f]">
-          <div className="md:col-span-4 space-y-3">
-            <p className="text-sm text-zinc-300 font-medium">Jimmy Manalel</p>
-            <p className="text-zinc-500 text-xs md:text-sm leading-relaxed max-w-sm">
-              {PERSON_DESCRIPTION_SHORT}
-            </p>
-          </div>
+        <div className="mb-10 pb-8 border-b border-[#1f1f1f]">
+          <p className="text-sm font-medium text-zinc-200 tracking-tight">Jimmy Manalel</p>
+          <p className="mt-1 text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+            Venture Corridor Builder · Cross-Border Startup Strategist
+          </p>
+          <p className="mt-2 text-xs text-zinc-600 max-w-xl leading-relaxed">
+            Building commercial pathways between Southeast Asia, South Korea, India and the GCC.
+          </p>
+        </div>
 
-          <div className="md:col-span-2 space-y-4">
-            <h4 className="text-white text-xs font-mono font-bold uppercase tracking-wider">
-              Explore
-            </h4>
-            <div className="flex flex-col gap-2 text-xs md:text-sm">
-              <Link to={ROUTES.ventureTools} className="hover:text-amber-500 transition">
-                Founder tools
-              </Link>
-              <Link to={ROUTES.strategyConversation} className="hover:text-amber-500 transition">
-                Strategy conversation
-              </Link>
-              <Link to={ROUTES.advisory} className="hover:text-amber-500 transition">
-                Advisory
-              </Link>
-              <Link to={ROUTES.partnerships} className="hover:text-amber-500 transition">
-                Partnerships
-              </Link>
-              <Link to={ROUTES.privacy} className="hover:text-amber-500 transition">
-                Privacy
-              </Link>
-            </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 mb-10">
+          <div>
+            <h4 className={colTitle}>Corridors</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link to={ROUTES.asiaGcc} className={colLink}>
+                  Asia–GCC Corridors
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.ventureCorridors} className={colLink}>
+                  Venture corridors
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.gccMarketEntry} className={colLink}>
+                  GCC market entry
+                </Link>
+              </li>
+            </ul>
           </div>
-
-          <div className="md:col-span-3 space-y-4">
-            <h4 className="text-white text-xs font-mono font-bold uppercase tracking-wider">
-              Topics
-            </h4>
-            <div className="flex flex-col gap-2 text-xs md:text-sm">
-              <Link to={ROUTES.investorNarrative} className="hover:text-amber-500 transition">
-                Investor narrative
-              </Link>
-              <Link to={ROUTES.commerceInfrastructure} className="hover:text-amber-500 transition">
-                Commerce infrastructure
-              </Link>
-              <Link to={ROUTES.partnerships} className="hover:text-amber-500 transition">
-                Ecosystem partnerships
-              </Link>
-            </div>
+          <div>
+            <h4 className={colTitle}>Founder Pathways</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link to={`${ROUTES.asiaGcc}#audit`} className={colLink}>
+                  GCC readiness
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.advisory} className={colLink}>
+                  Advisory enquiry
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.strategyConversation} className={colLink}>
+                  Strategy conversation
+                </Link>
+              </li>
+            </ul>
           </div>
-
-          <div className="md:col-span-3 space-y-4">
-            <h4 className="text-white text-xs font-mono font-bold uppercase tracking-wider">
-              Contact
-            </h4>
-            <div className="space-y-2 text-xs md:text-sm text-zinc-400">
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-amber-500 flex-shrink-0" aria-hidden="true" />
-                <a
-                  href="mailto:jimmymanalel@gmail.com"
-                  className="hover:text-amber-500 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded"
-                >
-                  jimmymanalel@gmail.com
+          <div>
+            <h4 className={colTitle}>Operator Perspective</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link to={`${ROUTES.asiaGcc}#investors`} className={colLink}>
+                  Commercial assessment
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.investorNarrative} className={colLink}>
+                  Investor narrative
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.commerceInfrastructure} className={colLink}>
+                  Commerce infrastructure
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className={colTitle}>Ecosystem Programmes</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link to={`${ROUTES.asiaGcc}#ecosystems`} className={colLink}>
+                  Corridor programmes
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.partnerships} className={colLink}>
+                  Partnerships
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className={colTitle}>Venture Tools</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link to={ROUTES.ventureTools} className={colLink}>
+                  All tools
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.dialogue} className={colLink}>
+                  Dialogue
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.narrativeGrader} className={colLink}>
+                  Narrative grader
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.commerceAudit} className={colLink}>
+                  Store economics
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className={colTitle}>About &amp; Contact</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link to={ROUTES.about} className={colLink}>
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.privacy} className={colLink}>
+                  Privacy
+                </Link>
+              </li>
+              <li>
+                <a href="mailto:jimmymanalel@gmail.com" className={colLink}>
+                  Contact
                 </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Linkedin className="w-4 h-4 text-amber-500 flex-shrink-0" aria-hidden="true" />
+              </li>
+              <li>
                 <a
                   href="https://www.linkedin.com/in/planterjimmy"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-amber-500 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded"
+                  className={colLink}
                 >
                   LinkedIn
                 </a>
-              </div>
-              <Link
-                to={ROUTES.strategyConversation}
-                className="inline-block text-amber-500 hover:text-amber-400 font-semibold mt-1"
-              >
-                Request a strategy conversation
-              </Link>
-            </div>
+              </li>
+            </ul>
           </div>
         </div>
 
-        {/* Understated profile / AEO crawl links — low emphasis */}
-        <div className="mb-6 text-[11px] leading-relaxed text-zinc-600">
-          <p className="text-zinc-500 font-medium tracking-tight">Jimmy Manalel</p>
-          <p className="mt-0.5 font-mono uppercase tracking-wider text-[10px] text-zinc-600">
-            Venture Corridor Builder · Cross-Border Startup Strategist
-          </p>
-          <nav
-            className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1"
-            aria-label="Profile and topic pages"
-          >
-            <Link to={ROUTES.about} className={subtleLink}>
-              About
-            </Link>
-            <span className="text-zinc-700" aria-hidden="true">
-              ·
-            </span>
-            <Link to={ROUTES.ventureCorridors} className={subtleLink}>
-              Venture Corridors
-            </Link>
-            <span className="text-zinc-700" aria-hidden="true">
-              ·
-            </span>
-            <Link to={ROUTES.gccMarketEntry} className={subtleLink}>
-              GCC Market Entry
-            </Link>
-          </nav>
-        </div>
-
-        <div className="flex flex-col md:flex-row justify-between items-center text-xs text-zinc-500 font-mono space-y-3 md:space-y-0 gap-2">
-          <div>© 2026 Jimmy Manalel. All rights reserved.</div>
-          <div className="text-center md:text-right max-w-md">
+        <div className="flex flex-col sm:flex-row justify-between gap-3 text-[11px] font-mono text-zinc-600 border-t border-[#1f1f1f] pt-6">
+          <p>© 2026 Jimmy Manalel. All rights reserved.</p>
+          <p className="sm:text-right max-w-md">
             Plantshop.ae participated in the 500 Global accelerator programme (as described on this
-            site).
-          </div>
+            site). Asia focus is strategic—not office locations.
+          </p>
         </div>
       </div>
     </footer>

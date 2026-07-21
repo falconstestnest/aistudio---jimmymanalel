@@ -140,6 +140,15 @@ const ROUTES = [
     h1MustInclude: "Commerce infrastructure review",
   },
   {
+    path: "/asia-gcc",
+    out: "asia-gcc/index.html",
+    title: "Asia–GCC Venture Corridors | Jimmy Manalel",
+    description:
+      "Operator-led market-entry, founder-readiness and ecosystem strategy connecting startups and investors across Singapore, Malaysia, Thailand, South Korea, India and the GCC.",
+    robots: "index, follow",
+    h1MustInclude: "Commercial pathways between Asia",
+  },
+  {
     path: "/privacy",
     out: "privacy/index.html",
     title: "Privacy | Jimmy Manalel",

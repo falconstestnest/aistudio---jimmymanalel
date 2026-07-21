@@ -26,6 +26,7 @@
       "source": "/commerce-infrastructure",
       "destination": "/commerce-infrastructure/index.html"
     },
+    { "source": "/asia-gcc", "destination": "/asia-gcc/index.html" },
     { "source": "/privacy", "destination": "/privacy/index.html" }
   ]
 }

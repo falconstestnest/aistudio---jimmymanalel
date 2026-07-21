@@ -19,6 +19,7 @@ import InvestorNarrativePage from "./pages/InvestorNarrativePage";
 import VentureCorridorsPage from "./pages/VentureCorridorsPage";
 import CommerceInfrastructurePage from "./pages/CommerceInfrastructurePage";
 import PrivacyPage from "./pages/PrivacyPage";
+import AsiaGccPage from "./pages/AsiaGccPage";
 import { ROUTES } from "./lib/siteRoutes";
 
 function RootLayout() {
@@ -34,8 +35,8 @@ function RootLayout() {
 
 /**
  * Explicit route tree only — no splat catch-all for production HTTP status.
- * Unknown server paths fall through to Vercel static 404.
- * Client NotFoundPage is a defensive fallback if the SPA shell is ever mis-served.
+ * Interactive tools are lazy-loaded inside VentureToolsPage so they stay out of
+ * the homepage critical path while prerender remains reliable.
  */
 export const routeObjects: RouteObject[] = [
   {
@@ -54,6 +55,7 @@ export const routeObjects: RouteObject[] = [
       { path: ROUTES.investorNarrative, element: <InvestorNarrativePage /> },
       { path: ROUTES.ventureCorridors, element: <VentureCorridorsPage /> },
       { path: ROUTES.commerceInfrastructure, element: <CommerceInfrastructurePage /> },
+      { path: ROUTES.asiaGcc, element: <AsiaGccPage /> },
       { path: ROUTES.privacy, element: <PrivacyPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
@@ -64,7 +66,6 @@ export function createAppRouter() {
   return createBrowserRouter(routeObjects);
 }
 
-/** Build-time prerender router for a single pathname. */
 export function createPrerenderRouter(pathname: string) {
   return createMemoryRouter(routeObjects, {
     initialEntries: [pathname],
