@@ -83,7 +83,7 @@ export default function ClarityAssistant() {
     {
       id: "welcome",
       role: "model",
-      text: "### Welcome to the Strategic Venture Corridor Sandbox\n\nI operate at the intersection of startup expansion corridors, institutional narratives, and marketplace platforms. I leverage my journey co-founding Plantshop.ae and working with 500 Global backed cohorts to help founders navigate structural scale, corridor entry, and investor readiness.\n\nWhere is your venture positioning stuck right now? Is it co-founder strategic alignment, cross-border fundraising pathways, or commerce unit-economics bleed?\n\nLet's map your next critical trajectory.",
+      text: "### Welcome to the Strategic Venture Corridor Sandbox\n\nI operate at the intersection of startup expansion corridors, institutional narratives, and marketplace platforms. I draw on co-founding Plantshop.ae—including that company’s participation in the 500 Startups / 500 Global accelerator ecosystem—to help founders navigate structural scale, corridor entry, and investor readiness.\n\nWhere is your venture positioning stuck right now? Is it co-founder strategic alignment, cross-border fundraising pathways, or commerce unit-economics bleed?\n\nLet's map your next critical trajectory.",
       timestamp: new Date()
     }
   ]);
