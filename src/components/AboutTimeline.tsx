@@ -66,16 +66,19 @@ export default function AboutTimeline() {
     {
       year: "2022 - Present",
       title: "Venture Corridor Builder",
-      subtitle: "1trepreneur Corridors & Ecosystem Strategy",
+      subtitle: "1trepreneur, founder mentoring & ecosystem strategy",
       icon: <Users className="w-5 h-5" />,
       category: "mentorship",
-      context: "Today, I bridge key startup ecosystems, connecting high-intensity tech teams with cross-border capital, launch channels, and strategic positioning. I guide the 1trepreneur corridor, mobilizing active founder networks to remove structural fundraising barriers and catalyze scale-ups across global markets.",
+      context:
+        "Today I work as a venture corridor builder across India, the GCC, and related markets. I co-founded and helped run 1trepreneur, a Dubai founder community centred on peer mentoring, meetups, and practical support—through which I have mentored more than 800 founders. I also helped create and conduct 1Tank, a pitch competition at Expand North Star in Dubai.",
       textbookVsReality: {
         textbook: "Advisors should give template consulting charts and high-level strategy booklets.",
-        reality: "Founders need narrative gravity, absolute unit economics clarity, and real-world execution. I work as an honest strategic partner to optimize your trajectory."
+        reality:
+          "Founders need clear narrative, unit economics, and honest operating feedback—whether in community mentoring or focused advisory conversations.",
       },
-      keyTakeaway: "Unclear narrative positioning and weak economic structures kill more startups than bad ideas. Let's build real pipelines."
-    }
+      keyTakeaway:
+        "Unclear narrative positioning and weak economic structures kill more startups than bad ideas. Mentoring scale and paid advisory are different relationships—keep them distinct.",
+    },
   ];
 
   const [activeEventIndex, setActiveEventIndex] = useState<number>(1);

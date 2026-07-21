@@ -9,10 +9,16 @@ import { RouteFocusManager, RouteSeo } from "./lib/seo";
 import LegacyHashRedirect from "./components/LegacyHashRedirect";
 import NotFoundPage from "./components/NotFoundPage";
 import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
 import VentureToolsPage from "./pages/VentureToolsPage";
 import StrategyConversationPage from "./pages/StrategyConversationPage";
 import AdvisoryPage from "./pages/AdvisoryPage";
 import PartnershipsPage from "./pages/PartnershipsPage";
+import GccMarketEntryPage from "./pages/GccMarketEntryPage";
+import InvestorNarrativePage from "./pages/InvestorNarrativePage";
+import VentureCorridorsPage from "./pages/VentureCorridorsPage";
+import CommerceInfrastructurePage from "./pages/CommerceInfrastructurePage";
+import PrivacyPage from "./pages/PrivacyPage";
 import { ROUTES } from "./lib/siteRoutes";
 
 function RootLayout() {
@@ -36,6 +42,7 @@ export const routeObjects: RouteObject[] = [
     element: <RootLayout />,
     children: [
       { path: ROUTES.home, element: <HomePage /> },
+      { path: ROUTES.about, element: <AboutPage /> },
       { path: ROUTES.ventureTools, element: <VentureToolsPage /> },
       { path: ROUTES.dialogue, element: <VentureToolsPage /> },
       { path: ROUTES.narrativeGrader, element: <VentureToolsPage /> },
@@ -43,7 +50,11 @@ export const routeObjects: RouteObject[] = [
       { path: ROUTES.strategyConversation, element: <StrategyConversationPage /> },
       { path: ROUTES.advisory, element: <AdvisoryPage /> },
       { path: ROUTES.partnerships, element: <PartnershipsPage /> },
-      // Defensive client fallback only — not the production HTTP 404 mechanism
+      { path: ROUTES.gccMarketEntry, element: <GccMarketEntryPage /> },
+      { path: ROUTES.investorNarrative, element: <InvestorNarrativePage /> },
+      { path: ROUTES.ventureCorridors, element: <VentureCorridorsPage /> },
+      { path: ROUTES.commerceInfrastructure, element: <CommerceInfrastructurePage /> },
+      { path: ROUTES.privacy, element: <PrivacyPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

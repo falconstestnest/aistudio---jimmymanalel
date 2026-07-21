@@ -219,7 +219,7 @@ export default function ClarityAssistant() {
               </span>
             </div>
             <p className="text-zinc-400 text-xs md:text-sm mt-0.5">
-              Strategic corridor guidance backed by 500 Global and regional marketplace execution
+              Strategic corridor guidance shaped by operator experience and marketplace execution
             </p>
           </div>
         </div>

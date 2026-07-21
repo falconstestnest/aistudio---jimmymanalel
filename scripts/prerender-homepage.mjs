@@ -27,16 +27,25 @@ const ROUTES = [
     out: "index.html",
     title: "Jimmy Manalel | Venture Corridor Builder & Cross-Border Startup Strategist",
     description:
-      "Jimmy Manalel is a venture corridor builder and cross-border startup strategist helping founders shape investor narratives, enter GCC markets, build strategic partnerships, and create scalable commerce infrastructure.",
+      "Jimmy Manalel is a venture corridor builder and cross-border startup strategist helping founders with investor narratives, GCC market entry, commerce infrastructure, and India–Middle East venture corridors.",
     robots: "index, follow",
     h1MustInclude: "Venture corridor builder connecting",
+  },
+  {
+    path: "/about",
+    out: "about/index.html",
+    title: "About Jimmy Manalel | Founder Journey & Cross-Border Work",
+    description:
+      "About Jimmy Manalel: banking roots, co-founding Plantshop.ae, 500 Global accelerator experience, and work building India–GCC venture corridors for founders.",
+    robots: "index, follow",
+    h1MustInclude: "About Jimmy Manalel",
   },
   {
     path: "/venture-tools",
     out: "venture-tools/index.html",
     title: "Founder Strategy Tools | Jimmy Manalel",
     description:
-      "Free founder strategy tools from Jimmy Manalel: corridor dialogue, startup narrative grading, and commerce infrastructure analytics for cross-border operators.",
+      "Free founder strategy tools from Jimmy Manalel: corridor dialogue, startup narrative grading, and commerce infrastructure analytics.",
     robots: "index, follow",
     h1MustInclude: "Founder strategy tools",
   },
@@ -61,9 +70,9 @@ const ROUTES = [
   {
     path: "/venture-tools/commerce-infrastructure-audit",
     out: "venture-tools/commerce-infrastructure-audit/index.html",
-    title: "Commerce Infrastructure Audit | Jimmy Manalel",
+    title: "Commerce Infrastructure Audit Tool | Jimmy Manalel",
     description:
-      "Audit commerce infrastructure economics: logistics density, multi-node warehousing, SLA risk, and margin preservation for cross-border brands.",
+      "Interactive store economics diagnostics: logistics ratio, LTV/CAC, and projected contribution using unit-economics thinking from e-commerce operations.",
     robots: "index, follow",
     h1MustInclude: "Commerce Infrastructure Audit",
   },
@@ -72,7 +81,7 @@ const ROUTES = [
     out: "strategy-conversation/index.html",
     title: "Request a Strategy Conversation | Jimmy Manalel",
     description:
-      "Request a strategy conversation with Jimmy Manalel. Share preferred timing for founder advisory, investor narrative, or GCC expansion discussions.",
+      "Request a strategy conversation with Jimmy Manalel about founder strategy, investor narrative, GCC expansion, or commerce infrastructure. This is a request, not an automatic booking.",
     robots: "index, follow",
     h1MustInclude: "Request a strategy conversation",
   },
@@ -81,7 +90,7 @@ const ROUTES = [
     out: "advisory/index.html",
     title: "Startup & GCC Expansion Advisory | Jimmy Manalel",
     description:
-      "Advisory enquiry for founder strategy, investor narrative architecture, venture readiness, commerce infrastructure, and GCC expansion pathways.",
+      "Founder advisory for investor narrative, venture readiness, commerce infrastructure, and GCC expansion. Who it is for, what is included, and how to enquire.",
     robots: "index, follow",
     h1MustInclude: "GCC expansion advisory",
   },
@@ -94,7 +103,52 @@ const ROUTES = [
     robots: "index, follow",
     h1MustInclude: "strategic partnerships",
   },
-];
+  {
+    path: "/gcc-market-entry",
+    out: "gcc-market-entry/index.html",
+    title: "GCC Market Entry for Startups | Jimmy Manalel",
+    description:
+      "Practical overview of GCC and UAE market entry for founders: common challenges, partnerships, distribution, licensing considerations, and mistakes to avoid.",
+    robots: "index, follow",
+    h1MustInclude: "GCC market entry for startups",
+  },
+  {
+    path: "/investor-narrative",
+    out: "investor-narrative/index.html",
+    title: "Investor Narrative Architecture | Jimmy Manalel",
+    description:
+      "What investor narrative architecture means, why narratives fail, and how founders separate storytelling from evidence, metrics, traction, and risk.",
+    robots: "index, follow",
+    h1MustInclude: "Investor narrative architecture",
+  },
+  {
+    path: "/venture-corridors",
+    out: "venture-corridors/index.html",
+    title: "Venture Corridor Building | India–GCC | Jimmy Manalel",
+    description:
+      "What a venture corridor is, how India–GCC founder and capital pathways work, and Jimmy Manalel’s role connecting ecosystems across markets.",
+    robots: "index, follow",
+    h1MustInclude: "Venture corridor building",
+  },
+  {
+    path: "/commerce-infrastructure",
+    out: "commerce-infrastructure/index.html",
+    title: "Commerce Infrastructure Review | Jimmy Manalel",
+    description:
+      "Commerce infrastructure for founders: unit economics, fulfilment, logistics, inventory, margins, and cross-border operational scalability.",
+    robots: "index, follow",
+    h1MustInclude: "Commerce infrastructure review",
+  },
+  {
+    path: "/privacy",
+    out: "privacy/index.html",
+    title: "Privacy | Jimmy Manalel",
+    description:
+      "How jimmymanalel.com handles enquiry and form data for strategy conversations, advisory, partnerships, and tool result emails.",
+    robots: "index, follow",
+    h1MustInclude: "Privacy",
+  },
+]
 
 function installDom(url) {
   const dom = new JSDOM("<!doctype html><html><body></body></html>", {

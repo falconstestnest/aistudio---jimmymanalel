@@ -24,6 +24,7 @@ function test(name, fn) {
 
 const APPROVED = [
   "/",
+  "/about",
   "/venture-tools",
   "/venture-tools/dialogue",
   "/venture-tools/narrative-grader",
@@ -31,6 +32,11 @@ const APPROVED = [
   "/strategy-conversation",
   "/advisory",
   "/partnerships",
+  "/gcc-market-entry",
+  "/investor-narrative",
+  "/venture-corridors",
+  "/commerce-infrastructure",
+  "/privacy",
 ];
 
 const LEGACY = {
@@ -147,6 +153,46 @@ test("sitemap includes only approved indexable paths, no fragments", () => {
   }
   assert.ok(!sm.includes("/api/"));
   assert.ok(!sm.includes("404"));
+});
+
+test("llms.txt exists with entity and key pages", () => {
+  const t = fs.readFileSync(path.join(root, "public/llms.txt"), "utf8");
+  assert.ok(t.includes("Jimmy Manalel"));
+  assert.ok(t.includes("https://www.jimmymanalel.com/about"));
+  assert.ok(t.includes("Plantshop.ae"));
+  assert.ok(t.includes("linkedin.com/in/planterjimmy"));
+  assert.ok(!t.toLowerCase().includes("guaranteed ranking"));
+});
+
+test("entity module avoids inventing unlisted ventures", () => {
+  const src = fs.readFileSync(path.join(root, "src/lib/entity.ts"), "utf8");
+  assert.ok(src.includes("Plantshop.ae"));
+  assert.ok(src.includes("1trepreneur"));
+  assert.ok(src.includes("1Tank"));
+  assert.ok(src.includes("800+ Founders Mentored") || src.includes("more than 800 founders"));
+  // Person JSON-LD must not embed email
+  assert.ok(src.includes("export function personJsonLd"));
+  assert.ok(!/personJsonLd[\s\S]*?email:\s*CONTACT_EMAIL/.test(src));
+  // Not asserted as fact on site without verification:
+  assert.ok(!src.includes("FindNursery"));
+  assert.ok(!src.includes("Founder Being"));
+  assert.ok(!src.includes("Plantshop.me"));
+});
+
+test("no obsolete 80+ Startups claim in public source", () => {
+  const files = [
+    "src/pages/HomePage.tsx",
+    "src/pages/AboutPage.tsx",
+    "src/lib/entity.ts",
+    "public/llms.txt",
+  ];
+  for (const rel of files) {
+    const text = fs.readFileSync(path.join(root, rel), "utf8");
+    assert.ok(!text.includes("80+ Startups"), `${rel} still has 80+ Startups`);
+    assert.ok(!/\b80\+ Startups\b/i.test(text), rel);
+  }
+  const home = fs.readFileSync(path.join(root, "src/pages/HomePage.tsx"), "utf8");
+  assert.ok(home.includes("800+ Founders Mentored"));
 });
 
 test("unique titles/descriptions per route in siteRoutes", () => {

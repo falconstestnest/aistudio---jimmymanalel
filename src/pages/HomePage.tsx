@@ -20,49 +20,100 @@ import {
 } from "lucide-react";
 import AboutTimeline from "../components/AboutTimeline";
 import PageShell from "../components/layout/PageShell";
-import { ROUTES } from "../lib/siteRoutes";
+import FaqSection from "../components/content/FaqSection";
+import JsonLd from "../components/seo/JsonLd";
+import {
+  PERSON_DESCRIPTION_MEDIUM,
+  PERSON_ID,
+  faqPageJsonLd,
+  onetrepreneurOrgJsonLd,
+  personJsonLd,
+  websiteJsonLd,
+} from "../lib/entity";
+import { ROUTES, SITE_ORIGIN } from "../lib/siteRoutes";
 
 const services = [
   {
-    title: "Founder Strategic Advisory",
-    desc: "High-leverage support on cross-border business models, narrative positioning, and strategic ecosystem alignment.",
-    actionLabel: "Request Strategy Session",
-    badge: "Strategic Access",
+    title: "Founder strategic advisory",
+    desc: "Support on cross-border business models, positioning, and practical next steps for founders.",
+    actionLabel: "Request a strategy conversation",
+    badge: "Advisory",
     to: ROUTES.strategyConversation,
   },
   {
-    title: "Investor Narrative Architecture",
-    desc: "Structured review of your institutional story, investor decks, and fundability variables across regional corridors.",
-    actionLabel: "Run Narrative Diagnostic",
-    badge: "Venture Capital Ready",
-    to: ROUTES.narrativeGrader,
+    title: "Investor narrative architecture",
+    desc: "Structure the story investors need: problem, evidence, economics, risks, and ask.",
+    actionLabel: "Read about investor narrative",
+    badge: "Narrative",
+    to: ROUTES.investorNarrative,
   },
   {
-    title: "Venture Readiness Intensive",
-    desc: "A deep, high-touch engagement to construct expansion narratives, model-unit cohesion, and global investor pipelines.",
-    actionLabel: "Apply for Intensive",
-    badge: "Accelerator Grade",
+    title: "Venture readiness",
+    desc: "Pressure-test whether your expansion and fundraising story holds under scrutiny.",
+    actionLabel: "Open advisory enquiry",
+    badge: "Readiness",
     to: ROUTES.advisory,
   },
   {
-    title: "Commerce Infrastructure Review",
-    desc: "Audit logistics economics, cross-border multi-node warehousing, SLA optimization, and margin preservation.",
-    actionLabel: "Run Infrastructure Audit",
-    badge: "Enterprise Scale",
-    to: ROUTES.commerceAudit,
+    title: "Commerce infrastructure review",
+    desc: "Examine unit economics, logistics cost, inventory risk, and margin after delivery and CAC.",
+    actionLabel: "Commerce infrastructure guide",
+    badge: "Operations",
+    to: ROUTES.commerceInfrastructure,
   },
   {
-    title: "GCC Expansion Pathways",
-    desc: "Bespoke market entry frameworks, local ecosystem structures, regulatory corridors, and strategic distribution networks across the GCC.",
-    actionLabel: "Request Pathway Access",
-    badge: "Corridor Expansion",
-    to: ROUTES.advisory,
+    title: "GCC expansion pathways",
+    desc: "Frame market entry for the UAE and GCC: partnerships, distribution, and common mistakes.",
+    actionLabel: "GCC market entry guide",
+    badge: "Market entry",
+    to: ROUTES.gccMarketEntry,
+  },
+];
+
+const homeFaqs = [
+  {
+    question: "Who is Jimmy Manalel?",
+    answer: PERSON_DESCRIPTION_MEDIUM,
+  },
+  {
+    question: "What does a venture corridor builder do?",
+    answer:
+      "A venture corridor builder connects founders, capital, distribution, and ecosystem partners across markets—so startups can expand with clearer partners and operating plans. Jimmy focuses on pathways linking India, the GCC, and the Middle East.",
+  },
+  {
+    question: "What does Jimmy Manalel help founders with?",
+    answer:
+      "Investor narrative, venture readiness, commerce infrastructure and unit economics, GCC market-entry framing, and strategic partnership introductions where relevant.",
+  },
+  {
+    question: "How can a founder request a strategy conversation?",
+    answer:
+      "Use the strategy conversation form to share preferred timing and context. Requests are reviewed manually and are not automatic calendar bookings.",
   },
 ];
 
 export default function HomePage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      personJsonLd(),
+      onetrepreneurOrgJsonLd(),
+      websiteJsonLd(),
+      {
+        "@type": "ProfilePage",
+        "@id": `${SITE_ORIGIN}/#profile`,
+        url: `${SITE_ORIGIN}/`,
+        name: "Jimmy Manalel | Venture Corridor Builder & Cross-Border Startup Strategist",
+        isPartOf: { "@id": `${SITE_ORIGIN}/#website` },
+        mainEntity: { "@id": PERSON_ID },
+      },
+      faqPageJsonLd(homeFaqs),
+    ],
+  };
+
   return (
     <PageShell homeSectionLinks>
+      <JsonLd data={jsonLd} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 space-y-16">
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-[#0d0d0d] border border-[#1f1f1f] p-8 md:p-12 rounded-3xl shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl -z-10 animate-pulse" />
@@ -82,12 +133,14 @@ export default function HomePage() {
             </h1>
 
             <p className="text-zinc-400 font-sans text-sm md:text-base leading-relaxed max-w-3xl">
-              Jimmy Manalel is a venture corridor builder and cross-border startup strategist. Founder
-              of <strong>Plantshop.ae</strong> (pioneering GCC e-commerce platform and 500 Global
-              portfolio startup), he works at the intersection of early-stage builders, capital
-              networks, and market entry corridors — helping startups shape investor narratives,
-              strengthen commerce infrastructure, and expand across the GCC, India, and global venture
-              hubs.
+              {PERSON_DESCRIPTION_MEDIUM}{" "}
+              <Link
+                to={ROUTES.about}
+                className="text-amber-500 hover:text-amber-400 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded"
+              >
+                Read the full background
+              </Link>
+              .
             </p>
 
             <div className="flex flex-wrap gap-3 pt-2">
@@ -106,6 +159,12 @@ export default function HomePage() {
               >
                 Analyze Store Economics
               </Link>
+              <Link
+                to={ROUTES.about}
+                className="px-6 py-3 border border-[#1f1f1f] hover:bg-zinc-900 text-zinc-300 hover:text-white rounded-xl text-sm font-sans font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
+              >
+                About Jimmy
+              </Link>
             </div>
           </div>
 
@@ -118,7 +177,7 @@ export default function HomePage() {
                 <div className="flex gap-2.5 items-start">
                   <Award className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
                   <span className="text-xs md:text-sm text-zinc-300 font-medium">
-                    Plantshop.ae Co-Founder (500 Global backed)
+                    Plantshop.ae co-founder (company entered 500 Global programme)
                   </span>
                 </div>
                 <div className="flex gap-2.5 items-start">
@@ -157,7 +216,7 @@ export default function HomePage() {
                 500 Global
               </div>
               <div className="text-[10px] md:text-xs font-mono text-zinc-500 uppercase tracking-wider mt-1.5">
-                Portfolio & Accelerator
+                Plantshop programme
               </div>
             </div>
             <div>
@@ -178,10 +237,11 @@ export default function HomePage() {
             </div>
             <div>
               <div className="text-2xl md:text-3xl font-display font-bold text-amber-500">
-                80+ Startups
+                800+ Founders Mentored
               </div>
-              <div className="text-[10px] md:text-xs font-mono text-zinc-500 uppercase tracking-wider mt-1.5">
-                Supported & Guided
+              <div className="text-[10px] md:text-xs font-mono text-zinc-500 uppercase tracking-wider mt-1.5 max-w-[14rem] mx-auto leading-snug">
+                Through 1trepreneur founder community programmes, meetups, mentoring sessions and
+                ecosystem initiatives in Dubai.
               </div>
             </div>
           </div>
@@ -218,20 +278,20 @@ export default function HomePage() {
             <div className="space-y-3.5 pt-2">
               {[
                 {
-                  title: "Founder of Plantshop.ae",
-                  body: "First-principles builder of GCC e-commerce botany logistics across regional microclimates to leading scale, backed by global institutions.",
+                  title: "Co-founder of Plantshop.ae",
+                  body: "Built online plants and gardening commerce in the UAE, with operational focus on inventory, delivery, and unit economics. Plantshop later entered the 500 Global accelerator programme.",
                 },
                 {
-                  title: "Backed by 500 Global",
-                  body: "Formally trained in Silicon Valley distribution framework modeling, investor alignments, and institutional diligence cycles.",
+                  title: "500 Global programme (via Plantshop)",
+                  body: "Plantshop’s accelerator experience intensified fundraising scrutiny, board alignment, and investor narrative pressure—not a claim that Jimmy is a 500 Global partner or investor.",
                 },
                 {
-                  title: "Founder of 1trepreneur",
-                  body: "Mobilizing a high-agency corridor network of global operators, organizing strategic summits, and unblocking investor-readiness bottlenecks.",
+                  title: "Co-founder of 1trepreneur",
+                  body: "Dubai founder community built on peer mentoring, meetups, and practical startup support. Through the community and its programmes, Jimmy has mentored more than 800 founders.",
                 },
                 {
-                  title: "Startup Platform Advocacy",
-                  body: "Working closely with incubators, regional funds, and cross-border corridors to navigate regulatory access and deal distribution loops.",
+                  title: "Co-created 1Tank at Expand North Star",
+                  body: "Helped create and conduct 1Tank, a pitch competition at Expand North Star in Dubai connecting selected founders with investors and ecosystem leaders.",
                 },
               ].map((item) => (
                 <div
@@ -265,20 +325,20 @@ export default function HomePage() {
             <div className="space-y-3.5 pt-2">
               {[
                 {
-                  title: "The Middle East ↔ India Venture Corridor",
-                  body: "Designing organic pipelines to streamline product validation, local licensing routing, and funding eligibility across emerging ecosystems.",
+                  title: "India ↔ Middle East venture corridors",
+                  body: "Connecting founders, capital conversations, and market-entry pathways between India, the GCC, and related ecosystems.",
                 },
                 {
-                  title: "1trepreneur Strategic Infrastructure",
-                  body: "Developing open-source scaling playbooks, margin audit simulators, and modular data-room standards to replace low-yield consultancy.",
+                  title: "1trepreneur community programmes",
+                  body: "Peer mentorship, founder meetups, speed mentoring, and ecosystem activities organised with the Dubai founder community.",
                 },
                 {
-                  title: "Strategic Multi-Node Commerce Logistics",
-                  body: "Assisting cross-border brands to audit and construct cold-chain structures, preventing inventory leaks and last-mile SLA degradation.",
+                  title: "Commerce infrastructure clarity",
+                  body: "Helping founders examine logistics cost, margins, and multi-node operations before scaling marketing or expansion claims.",
                 },
                 {
-                  title: "Elite Founder Gatherings & Roundtables",
-                  body: "Curating invite-only, high-density summits connecting operators directly with institutional heads and capital syndicates.",
+                  title: "1Tank pitch competition",
+                  body: "Co-created 1Tank at Expand North Star, giving selected startups a stage format to present to investors and ecosystem leaders.",
                 },
               ].map((item) => (
                 <div
@@ -302,11 +362,11 @@ export default function HomePage() {
               Venture Pipelines
             </span>
             <h2 className="text-3xl font-sans font-bold text-white mt-2">
-              Strategic Access Pathways
+              How founders work with Jimmy
             </h2>
             <p className="text-zinc-400 text-sm md:text-base mt-2 max-w-2xl mx-auto">
-              Unlock cross-border launchpads, institutional narrative architecture, and audited
-              commerce infrastructure designed for sovereign startup operators.
+              Clear entry points for advisory, narrative, commerce operations, and GCC expansion—
+              each linked to a full explanation or tool.
             </p>
           </div>
 
@@ -404,6 +464,61 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Topic hub for answer engines and humans */}
+        <section className="space-y-6" aria-labelledby="topics-heading">
+          <div className="text-center max-w-2xl mx-auto">
+            <h2 id="topics-heading" className="text-3xl font-sans font-bold text-white">
+              Topics explained in full
+            </h2>
+            <p className="text-zinc-400 text-sm md:text-base mt-2">
+              Direct, crawlable pages that answer common founder questions in plain language.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              {
+                to: ROUTES.about,
+                title: "About Jimmy Manalel",
+                body: "Background, Plantshop.ae, 500 Global programme context, and current work.",
+              },
+              {
+                to: ROUTES.ventureCorridors,
+                title: "Venture corridor building",
+                body: "What corridors are and how India–GCC founder pathways work.",
+              },
+              {
+                to: ROUTES.gccMarketEntry,
+                title: "GCC market entry",
+                body: "Challenges, partnerships, licensing caveats, and common mistakes.",
+              },
+              {
+                to: ROUTES.investorNarrative,
+                title: "Investor narrative architecture",
+                body: "Story versus evidence, metrics, and readiness.",
+              },
+              {
+                to: ROUTES.commerceInfrastructure,
+                title: "Commerce infrastructure",
+                body: "Unit economics, fulfilment, inventory, and margins.",
+              },
+              {
+                to: ROUTES.partnerships,
+                title: "Partnerships",
+                body: "Speaking, programmes, communities, and strategic collaboration.",
+              },
+            ].map((t) => (
+              <Link
+                key={t.to}
+                to={t.to}
+                className="rounded-2xl border border-[#1f1f1f] bg-[#0b0b0b] p-5 hover:border-amber-500/30 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
+              >
+                <h3 className="font-sans font-bold text-white">{t.title}</h3>
+                <p className="text-xs text-zinc-400 mt-2 leading-relaxed">{t.body}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* Conversion teasers */}
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Link
@@ -426,10 +541,9 @@ export default function HomePage() {
             className="bg-[#0d0d0d] border border-[#1f1f1f] p-6 md:p-8 rounded-2xl hover:border-amber-500/30 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
           >
             <Briefcase className="w-5 h-5 text-amber-500 mb-3" aria-hidden="true" />
-            <h2 className="text-xl font-sans font-bold text-white">Work with Jimmy</h2>
+            <h2 className="text-xl font-sans font-bold text-white">Startup &amp; GCC advisory</h2>
             <p className="text-sm text-zinc-400 mt-2 leading-relaxed">
-              Advisory for investor narrative, venture readiness, commerce infrastructure, and GCC
-              expansion pathways.
+              Who advisory is for, what is included, what is not, and how to enquire.
             </p>
             <span className="inline-flex items-center gap-1 mt-4 text-sm font-semibold text-amber-500">
               Open advisory enquiry <ChevronRight className="w-4 h-4" />
@@ -451,6 +565,8 @@ export default function HomePage() {
             </span>
           </Link>
         </section>
+
+        <FaqSection title="Answers for founders and partners" items={homeFaqs} />
       </main>
     </PageShell>
   );

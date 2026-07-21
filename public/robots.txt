@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Public information architecture
 Sitemap: https://www.jimmymanalel.com/sitemap.xml
+
+# Optional machine-readable site guide (not a substitute for HTML pages)
+# https://www.jimmymanalel.com/llms.txt

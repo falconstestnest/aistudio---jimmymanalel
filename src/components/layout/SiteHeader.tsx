@@ -39,30 +39,23 @@ export default function SiteHeader({ homeSectionLinks = false }: SiteHeaderProps
           className="hidden xl:flex items-center gap-5 text-xs sm:text-sm font-medium text-zinc-400 font-sans"
           aria-label="Primary"
         >
+          <NavLink to={ROUTES.about} className={navLinkClass}>
+            About
+          </NavLink>
+          <NavLink to={ROUTES.ventureCorridors} className={navLinkClass}>
+            Corridors
+          </NavLink>
+          <NavLink to={ROUTES.gccMarketEntry} className={navLinkClass}>
+            GCC entry
+          </NavLink>
           {homeSectionLinks ? (
-            <>
-              <a href="#journey-header" className={linkClass}>
-                About
-              </a>
-              <a href="#ecosystem-engagement" className={linkClass}>
-                Ecosystem
-              </a>
-              <a href="#services-header" className={linkClass}>
-                Pathways
-              </a>
-            </>
+            <a href="#services-header" className={linkClass}>
+              Pathways
+            </a>
           ) : (
-            <>
-              <Link to={`${ROUTES.home}#journey-header`} className={linkClass}>
-                About
-              </Link>
-              <Link to={`${ROUTES.home}#ecosystem-engagement`} className={linkClass}>
-                Ecosystem
-              </Link>
-              <Link to={`${ROUTES.home}#services-header`} className={linkClass}>
-                Pathways
-              </Link>
-            </>
+            <Link to={`${ROUTES.home}#services-header`} className={linkClass}>
+              Pathways
+            </Link>
           )}
           <NavLink to={ROUTES.dialogue} className={navLinkClass} end>
             Dialogue

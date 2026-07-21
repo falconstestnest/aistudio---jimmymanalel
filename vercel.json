@@ -2,14 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": false,
   "rewrites": [
-    {
-      "source": "/venture-tools",
-      "destination": "/venture-tools/index.html"
-    },
-    {
-      "source": "/venture-tools/dialogue",
-      "destination": "/venture-tools/dialogue/index.html"
-    },
+    { "source": "/about", "destination": "/about/index.html" },
+    { "source": "/venture-tools", "destination": "/venture-tools/index.html" },
+    { "source": "/venture-tools/dialogue", "destination": "/venture-tools/dialogue/index.html" },
     {
       "source": "/venture-tools/narrative-grader",
       "destination": "/venture-tools/narrative-grader/index.html"
@@ -22,13 +17,15 @@
       "source": "/strategy-conversation",
       "destination": "/strategy-conversation/index.html"
     },
+    { "source": "/advisory", "destination": "/advisory/index.html" },
+    { "source": "/partnerships", "destination": "/partnerships/index.html" },
+    { "source": "/gcc-market-entry", "destination": "/gcc-market-entry/index.html" },
+    { "source": "/investor-narrative", "destination": "/investor-narrative/index.html" },
+    { "source": "/venture-corridors", "destination": "/venture-corridors/index.html" },
     {
-      "source": "/advisory",
-      "destination": "/advisory/index.html"
+      "source": "/commerce-infrastructure",
+      "destination": "/commerce-infrastructure/index.html"
     },
-    {
-      "source": "/partnerships",
-      "destination": "/partnerships/index.html"
-    }
+    { "source": "/privacy", "destination": "/privacy/index.html" }
   ]
 }
