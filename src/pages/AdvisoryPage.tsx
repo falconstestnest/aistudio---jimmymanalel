@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router";
-import { Briefcase } from "lucide-react";
 import PageShell from "../components/layout/PageShell";
 import Breadcrumbs from "../components/content/Breadcrumbs";
 import FaqSection from "../components/content/FaqSection";
@@ -57,25 +56,32 @@ export default function AdvisoryPage() {
   return (
     <PageShell>
       <JsonLd data={jsonLd} />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 space-y-10">
-        <div className="max-w-3xl space-y-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 space-y-8">
+        <div className="max-w-3xl space-y-3">
           <Breadcrumbs items={[{ label: "Advisory" }]} />
-          <header className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-xs font-mono font-bold tracking-wider text-amber-500 uppercase">
-              <Briefcase className="w-3 h-3" aria-hidden="true" />
-              Advisory
-            </div>
+          <header className="space-y-2">
             <h1 className="text-3xl md:text-4xl font-display font-medium text-white tracking-tight">
               Startup &amp; GCC expansion advisory
             </h1>
-            <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
-              Jimmy Manalel provides founder-facing advisory on cross-border strategy: clarifying
-              investor narrative, testing venture readiness, reviewing commerce infrastructure, and
-              framing GCC market-entry pathways. This is practical operator guidance—not legal,
-              accounting, or investment brokerage.
+            <p className="text-sm md:text-base text-zinc-400 leading-relaxed">
+              Founder-facing advisory on investor narrative, venture readiness, commerce infrastructure,
+              and GCC market-entry pathways—not legal, accounting, or investment brokerage. Prefer a
+              timed discussion?{" "}
+              <Link
+                to={ROUTES.strategyConversation}
+                className="text-amber-500 hover:text-amber-400 font-semibold"
+              >
+                Request a strategy conversation
+              </Link>
+              .
             </p>
           </header>
+        </div>
 
+        {/* Enquiry form high on the page */}
+        <AdvisoryEnquiryForm />
+
+        <div className="max-w-3xl space-y-8 pt-2">
           <section className="space-y-3">
             <h2 className="text-xl font-sans font-bold text-white">Who it is for</h2>
             <p className="text-sm md:text-base text-zinc-400 leading-relaxed">
@@ -151,21 +157,6 @@ export default function AdvisoryPage() {
             </ul>
           </section>
 
-          <p className="text-sm text-zinc-400">
-            Prefer a timed discussion first?{" "}
-            <Link
-              to={ROUTES.strategyConversation}
-              className="text-amber-500 hover:text-amber-400 font-semibold"
-            >
-              Request a strategy conversation
-            </Link>
-            .
-          </p>
-        </div>
-
-        <AdvisoryEnquiryForm />
-
-        <div className="max-w-3xl">
           <FaqSection items={faqs} />
         </div>
       </main>

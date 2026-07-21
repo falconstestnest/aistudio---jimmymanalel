@@ -40,9 +40,6 @@ export default function SiteHeader({ homeSectionLinks = false }: SiteHeaderProps
         >
           {homeSectionLinks ? (
             <>
-              <a href="#journey-header" className={linkClass}>
-                About
-              </a>
               <a href="#ecosystem-engagement" className={linkClass}>
                 Ecosystem
               </a>
@@ -52,9 +49,6 @@ export default function SiteHeader({ homeSectionLinks = false }: SiteHeaderProps
             </>
           ) : (
             <>
-              <Link to={`${ROUTES.home}#journey-header`} className={linkClass}>
-                About
-              </Link>
               <Link to={`${ROUTES.home}#ecosystem-engagement`} className={linkClass}>
                 Ecosystem
               </Link>
