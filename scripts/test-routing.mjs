@@ -211,22 +211,22 @@ test("asia-gcc page content and constraints", () => {
     path.join(root, "src/components/layout/SiteHeader.tsx"),
     "utf8"
   );
-  // Minimal header: Home · Venture Tools · Asia–GCC · About · Private Conversation
+  // Compact identity header: JM · Jimmy Manalel · centre nav · Private Conversation
   assert.ok(!header.includes("Singapore")); // no country list in header
-  assert.ok(!header.includes(">JM<") && !header.includes("JM</"));
-  assert.ok(!header.includes("Jimmy Manalel"));
-  assert.ok(!header.includes("Venture Corridor Builder"));
+  assert.ok(header.includes("JM"));
+  assert.ok(header.includes("Jimmy Manalel"));
+  assert.ok(header.includes("Venture Corridor Builder"));
   assert.ok(!header.includes("Analytics"));
   assert.ok(!header.includes("Work With Jimmy"));
   assert.ok(!header.includes("Narrative Grader"));
-  assert.ok(!header.includes("Ecosystem"));
-  assert.ok(!header.includes("Pathways"));
   assert.ok(!header.includes("Dialogue"));
   assert.ok(header.includes("Venture Tools"));
   assert.ok(header.includes("ROUTES.asiaGcc") || header.includes("Asia–GCC"));
   assert.ok(header.includes("About"));
   assert.ok(header.includes("Private Conversation"));
-  assert.ok(header.includes("Home"));
+  // Single desktop CTA id (mobile CTA lives inside menu, not a second header button)
+  const desktopCtaMatches = header.match(/id="header-booking"/g) || [];
+  assert.equal(desktopCtaMatches.length, 1);
   const footer = fs.readFileSync(
     path.join(root, "src/components/layout/SiteFooter.tsx"),
     "utf8"
@@ -389,8 +389,54 @@ if (fs.existsSync(distIndex)) {
     );
     assert.ok(html.includes("Singapore") || html.includes("Illustrative strategic corridor"));
   });
+
+  test("dist homepage hierarchy and restored pathways", () => {
+    const html = fs.readFileSync(path.join(root, "dist/index.html"), "utf8");
+    assert.ok(html.includes("The Operator Track Record"));
+    assert.ok(html.includes("My Journey"));
+    // Exactly one visible My Journey H2 (not duplicated in timeline badge/heading)
+    const myJourneyH2 = (html.match(/>My Journey</g) || []).length;
+    assert.ok(myJourneyH2 >= 1, "My Journey heading present");
+    assert.ok(html.includes("Founder Workspace"));
+    assert.ok(html.includes("Narrative Grader"));
+    assert.ok(html.includes("/venture-tools/narrative-grader"));
+    assert.ok(html.includes("Ecosystem Navigation"));
+    assert.ok(html.includes("Request Strategic Corridor Access"));
+    assert.ok(html.includes("Illustrative strategic corridor nodes"));
+    // JM identity in prerendered header
+    assert.ok(html.includes("Jimmy Manalel"));
+    assert.ok(html.includes(">JM<") || html.includes("JM</"));
+    // Tools not in homepage initial bundle marker
+    assert.ok(!html.includes("VentureToolsWorkspace"));
+    // 500 Global attached to Plantshop only — no personal VC backing title
+    assert.ok(!html.includes("VC Backing & 500 Global"));
+    assert.ok(
+      html.includes("Plantshop") && html.includes("500 Global Chapter"),
+      "Plantshop-specific 500 Global timeline title present"
+    );
+    assert.ok(!/personally.*500 Global|personally backed by 500/i.test(html));
+  });
 } else {
   console.log("  ⚠ dist/ not built yet — skipping built-output checks");
 }
+
+test("500 Global wording stays company-attached", () => {
+  const timeline = fs.readFileSync(
+    path.join(root, "src/components/AboutTimeline.tsx"),
+    "utf8"
+  );
+  assert.ok(!timeline.includes("VC Backing & 500 Global"));
+  assert.ok(timeline.includes("500 Global Chapter"));
+  assert.ok(
+    timeline.includes("Plantshop participated in the 500 Startups ecosystem") ||
+      timeline.includes("500 Startups ecosystem, now 500 Global")
+  );
+  assert.ok(!timeline.includes("received backing from 500 Global"));
+  assert.ok(!timeline.includes("personally backed"));
+  // Dialogue system prompts must not claim personal 500 Global portfolio status
+  const server = fs.readFileSync(path.join(root, "server.ts"), "utf8");
+  assert.ok(!server.includes("500 Global portfolio co-founder"));
+  assert.ok(!server.includes("backed by 500 Global"));
+});
 
 console.log(`\n${passed} routing tests passed.\n`);

@@ -10,9 +10,12 @@ import {
   MessageSquare,
   FileCheck2,
   Calculator,
+  Sparkles,
 } from "lucide-react";
 import AboutTimeline from "../components/AboutTimeline";
 import AsiaGccSection from "../components/home/AsiaGccSection";
+import EcosystemNavigation from "../components/home/EcosystemNavigation";
+import FounderWorkspacePreview from "../components/home/FounderWorkspacePreview";
 import CorridorAtlas from "../components/corridor/CorridorAtlas";
 import CorridorCredibility from "../components/corridor/CorridorCredibility";
 import PrivateConversationClose from "../components/corridor/PrivateConversationClose";
@@ -112,8 +115,8 @@ export default function HomePage() {
     <PageShell homeSectionLinks>
       <JsonLd data={jsonLd} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-16 md:space-y-20">
-        {/* 1. Hero */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-[#0d0d0d] border border-[#1f1f1f] p-6 md:p-10 rounded-3xl shadow-sm relative overflow-hidden">
+        {/* 1. Hero — copy ~42–45% · atlas ~55–58% */}
+        <section className="relative overflow-visible">
           <div
             className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl -z-10 motion-safe:animate-pulse"
             aria-hidden="true"
@@ -122,44 +125,45 @@ export default function HomePage() {
             className="absolute bottom-0 left-0 w-72 h-72 bg-sky-900/20 rounded-full blur-3xl -z-10"
             aria-hidden="true"
           />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center rounded-3xl border border-[#1f1f1f] bg-[#0d0d0d] p-6 md:p-8 lg:p-10 shadow-sm">
+            <div className="lg:col-span-5 space-y-5">
+              <h1 className="text-3xl md:text-4xl xl:text-5xl font-display font-medium text-white tracking-tight leading-tight">
+                Venture corridor builder connecting{" "}
+                <strong className="serif-italic text-amber-500 font-serif font-normal">
+                  founders, ecosystems,
+                </strong>{" "}
+                and market expansion pathways.
+              </h1>
 
-          <div className="lg:col-span-6 space-y-5">
-            <h1 className="text-3xl md:text-5xl font-display font-medium text-white tracking-tight leading-tight">
-              Venture corridor builder connecting{" "}
-              <strong className="serif-italic text-amber-500 font-serif font-normal">
-                founders, ecosystems,
-              </strong>{" "}
-              and market expansion pathways.
-            </h1>
+              <p className="text-zinc-400 font-sans text-sm md:text-base leading-relaxed max-w-xl">
+                Building the strategy, narrative, operating readiness and relationships required for
+                ventures to move across markets.
+              </p>
 
-            <p className="text-zinc-400 font-sans text-sm md:text-base leading-relaxed max-w-xl">
-              Building the strategy, narrative, operating readiness and relationships required for
-              ventures to move across markets.
-            </p>
+              <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-500">
+                Asia · India · GCC
+              </p>
 
-            <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-500">
-              Asia · India · GCC
-            </p>
-
-            <div className="flex flex-wrap gap-3 pt-1">
-              <Link
-                to={ROUTES.asiaGcc}
-                className="bg-amber-500 hover:bg-amber-400 text-black px-6 py-3 rounded-xl text-sm font-sans font-bold inline-flex items-center gap-2 group transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
-              >
-                Explore the Asia–GCC Corridor
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition motion-reduce:transform-none" />
-              </Link>
-              <Link
-                to={ROUTES.strategyConversation}
-                className="px-6 py-3 border border-[#1f1f1f] hover:bg-zinc-900 text-zinc-300 hover:text-white rounded-xl text-sm font-sans font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
-              >
-                Start a Private Conversation
-              </Link>
+              <div className="flex flex-wrap gap-3 pt-1">
+                <Link
+                  to={ROUTES.asiaGcc}
+                  className="bg-amber-500 hover:bg-amber-400 text-black px-6 py-3 rounded-xl text-sm font-sans font-bold inline-flex items-center gap-2 group transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
+                >
+                  Explore the Asia–GCC Corridor
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition motion-reduce:transform-none" />
+                </Link>
+                <Link
+                  to={ROUTES.strategyConversation}
+                  className="px-6 py-3 border border-[#1f1f1f] hover:bg-zinc-900 text-zinc-300 hover:text-white rounded-xl text-sm font-sans font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
+                >
+                  Start a Private Conversation
+                </Link>
+              </div>
             </div>
-          </div>
 
-          <div className="lg:col-span-6">
-            <CorridorAtlas />
+            <div className="lg:col-span-7 lg:-mr-2 xl:-mr-4">
+              <CorridorAtlas size="hero" />
+            </div>
           </div>
         </section>
 
@@ -181,21 +185,39 @@ export default function HomePage() {
           ))}
         </div>
 
-        {/* 3–4. Asia–GCC thesis + pathways */}
-        <AsiaGccSection />
-
-        {/* 5. Journey */}
-        <section className="space-y-6">
-          <div id="journey-header" className="scroll-mt-24 text-center">
+        {/* 3. Operator Track Record / My Journey (single H2) */}
+        <section className="space-y-6" aria-labelledby="journey-heading">
+          <div id="journey-header" className="scroll-mt-24 text-center space-y-2">
             <p className="text-sm font-mono text-zinc-500 font-bold uppercase tracking-wider">
               The Operator Track Record
             </p>
-            <h2 className="text-3xl font-display font-semibold text-white mt-1">My Journey</h2>
+            <h2
+              id="journey-heading"
+              className="text-3xl font-display font-semibold text-white mt-1"
+            >
+              My Journey
+            </h2>
+            <p className="text-sm md:text-base text-zinc-400 max-w-xl mx-auto">
+              Real operator experience, not textbook blueprints.
+            </p>
+            <p className="inline-flex items-center gap-2 text-xs text-zinc-500 bg-black/50 border border-[#1f1f1f] px-4 py-2 rounded-lg font-mono">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" aria-hidden="true" />
+              GCC, India &amp; Global Corridors
+            </p>
           </div>
           <AboutTimeline />
         </section>
 
-        {/* 6. Services + tools */}
+        {/* 4–5. Asia–GCC thesis, flows, pathways */}
+        <AsiaGccSection />
+
+        {/* 6. Founder Workspace + Narrative Grader preview */}
+        <FounderWorkspacePreview />
+
+        {/* 7. Ecosystem Navigation */}
+        <EcosystemNavigation />
+
+        {/* 8. Services + tool cards */}
         <section className="space-y-8">
           <div id="services-header" className="scroll-mt-24 text-center">
             <span className="px-3 py-1 bg-[#0d0d0d] border border-[#1f1f1f] text-amber-500 rounded-full text-xs font-mono font-medium uppercase tracking-wider">
@@ -277,7 +299,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 7. Ecosystem credentials */}
+        {/* 9. Ecosystem credentials */}
         <section
           className="grid grid-cols-1 lg:grid-cols-2 gap-8 scroll-mt-24"
           id="ecosystem-engagement"
@@ -302,7 +324,7 @@ export default function HomePage() {
           <CorridorCredibility />
         </section>
 
-        {/* 8. Private conversation */}
+        {/* 10. Private conversation */}
         <PrivateConversationClose />
 
         <FaqSection title="Answers for founders and partners" items={homeFaqs} />
