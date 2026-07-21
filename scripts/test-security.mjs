@@ -36,21 +36,37 @@ async function testAsync(name, fn) {
 
 console.log("\nSecurity exposure tests\n-----------------------");
 
-test("GrowthMarketingHub is not imported by App.tsx", () => {
-  const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
-  assert.ok(!app.includes("GrowthMarketingHub"));
-  assert.ok(!app.includes("Growth & Leads"));
-  assert.ok(!app.includes("tab-select-growth"));
-  assert.ok(!app.includes('activeTab === "growth"'));
+test("GrowthMarketingHub is not imported by public pages/router", () => {
+  for (const rel of ["src/router.tsx", "src/pages/HomePage.tsx", "src/App.tsx"]) {
+    const app = fs.readFileSync(path.join(root, rel), "utf8");
+    assert.ok(!app.includes("GrowthMarketingHub"), rel);
+    assert.ok(!app.includes("Growth & Leads"), rel);
+    assert.ok(!app.includes("tab-select-growth"), rel);
+    assert.ok(!app.includes('activeTab === "growth"'), rel);
+  }
 });
 
-test("App exposes visitor lead forms, not CRM sandbox copy", () => {
-  const app = fs.readFileSync(path.join(root, "src/App.tsx"), "utf8");
-  assert.ok(app.includes("AdvisoryEnquiryForm"));
-  assert.ok(app.includes("PartnershipEnquiryForm"));
-  assert.ok(app.includes("BookingForm"));
-  assert.ok(!app.includes("Dispatch HubSpot"));
-  assert.ok(!app.includes("CRM Payload Sandbox"));
+test("Visitor lead forms live on public routes, not CRM sandbox copy", () => {
+  const advisory = fs.readFileSync(path.join(root, "src/pages/AdvisoryPage.tsx"), "utf8");
+  const partnerships = fs.readFileSync(
+    path.join(root, "src/pages/PartnershipsPage.tsx"),
+    "utf8"
+  );
+  const strategy = fs.readFileSync(
+    path.join(root, "src/pages/StrategyConversationPage.tsx"),
+    "utf8"
+  );
+  const router = fs.readFileSync(path.join(root, "src/router.tsx"), "utf8");
+  assert.ok(advisory.includes("AdvisoryEnquiryForm"));
+  assert.ok(partnerships.includes("PartnershipEnquiryForm"));
+  assert.ok(strategy.includes("BookingForm"));
+  assert.ok(router.includes("AdvisoryPage"));
+  assert.ok(router.includes("PartnershipsPage"));
+  assert.ok(router.includes("StrategyConversationPage"));
+  for (const text of [advisory, partnerships, strategy, router]) {
+    assert.ok(!text.includes("Dispatch HubSpot"));
+    assert.ok(!text.includes("CRM Payload Sandbox"));
+  }
 });
 
 test("production sandbox always denied (even with secret)", () => {

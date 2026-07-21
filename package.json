@@ -13,7 +13,8 @@
     "check:links": "node scripts/check-links.mjs",
     "check:links:external": "node scripts/check-links.mjs --external",
     "test:leads": "tsx scripts/test-leads.mjs",
-    "test:security": "tsx scripts/test-security.mjs"
+    "test:security": "tsx scripts/test-security.mjs",
+    "test:routing": "tsx scripts/test-routing.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
@@ -25,6 +26,7 @@
     "motion": "^12.23.24",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
+    "react-router-dom": "^7.18.1",
     "vite": "^6.2.3"
   },
   "devDependencies": {

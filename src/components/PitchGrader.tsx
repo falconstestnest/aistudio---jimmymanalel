@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { FileWarning, CheckCircle, BarChart3, TrendingUp, AlertTriangle, RefreshCw, Layers, ShieldCheck, Zap } from "lucide-react";
 import { PitchInput, PitchGradeResult } from "../types";
 import EmailResultsCapture from "./leads/EmailResultsCapture";
+import { motionInitial } from "../utils/motion";
 
 export default function PitchGrader() {
   const [inputs, setInputs] = useState<PitchInput>({
@@ -137,7 +138,7 @@ export default function PitchGrader() {
         {!result && !isLoading ? (
           <motion.form
             onSubmit={handlePitchGradeSubmit}
-            initial={{ opacity: 0, y: 10 }}
+            initial={motionInitial({ opacity: 0, y: 10 })}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98 }}
             className="space-y-6"
@@ -284,7 +285,7 @@ export default function PitchGrader() {
         ) : isLoading ? (
           <motion.div
             key="loading"
-            initial={{ opacity: 0 }}
+            initial={motionInitial({ opacity: 0 })}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="py-16 flex flex-col items-center justify-center text-center space-y-4"
@@ -303,7 +304,7 @@ export default function PitchGrader() {
         ) : (
           <motion.div
             key="result"
-            initial={{ opacity: 0, scale: 0.98 }}
+            initial={motionInitial({ opacity: 0, scale: 0.98 })}
             animate={{ opacity: 1, scale: 1 }}
             className="space-y-8"
           >

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * Build-time homepage prerender via Vite SSR + JSDOM.
- * Injects rendered App HTML into dist/index.html #root.
- * Runtime still uses createRoot (not hydrateRoot) — no hydration mismatch.
- * Leaves dist/404.html untouched. No SPA rewrites.
+ * Build-time multi-route prerender via Vite SSR + JSDOM + React Router.
+ * Generates route-specific HTML shells under dist/ for approved public paths.
+ * Runtime still uses createRoot (not hydrateRoot). Leaves dist/404.html untouched.
+ * No catch-all SPA rewrites.
  */
 
 import fs from "node:fs";
@@ -16,18 +16,93 @@ import { JSDOM } from "jsdom";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
-const distIndex = path.join(root, "dist", "index.html");
-const dist404 = path.join(root, "dist", "404.html");
+const distDir = path.join(root, "dist");
+const distIndex = path.join(distDir, "index.html");
+const dist404 = path.join(distDir, "404.html");
+const SITE_ORIGIN = "https://www.jimmymanalel.com";
 
-function installDom() {
+const ROUTES = [
+  {
+    path: "/",
+    out: "index.html",
+    title: "Jimmy Manalel | Venture Corridor Builder & Cross-Border Startup Strategist",
+    description:
+      "Jimmy Manalel is a venture corridor builder and cross-border startup strategist helping founders shape investor narratives, enter GCC markets, build strategic partnerships, and create scalable commerce infrastructure.",
+    robots: "index, follow",
+    h1MustInclude: "Venture corridor builder connecting",
+  },
+  {
+    path: "/venture-tools",
+    out: "venture-tools/index.html",
+    title: "Founder Strategy Tools | Jimmy Manalel",
+    description:
+      "Free founder strategy tools from Jimmy Manalel: corridor dialogue, startup narrative grading, and commerce infrastructure analytics for cross-border operators.",
+    robots: "index, follow",
+    h1MustInclude: "Founder strategy tools",
+  },
+  {
+    path: "/venture-tools/dialogue",
+    out: "venture-tools/dialogue/index.html",
+    title: "Founder Strategy Dialogue | Jimmy Manalel",
+    description:
+      "Corridor Dialogue — a founder strategy conversation tool to pressure-test positioning, expansion logic, and venture narrative clarity.",
+    robots: "index, follow",
+    h1MustInclude: "Corridor Dialogue",
+  },
+  {
+    path: "/venture-tools/narrative-grader",
+    out: "venture-tools/narrative-grader/index.html",
+    title: "Startup Narrative Grader | Jimmy Manalel",
+    description:
+      "Score and strengthen your investor narrative with Jimmy Manalel’s startup narrative grader — clarity, fundability, and corridor positioning.",
+    robots: "index, follow",
+    h1MustInclude: "Narrative Grader",
+  },
+  {
+    path: "/venture-tools/commerce-infrastructure-audit",
+    out: "venture-tools/commerce-infrastructure-audit/index.html",
+    title: "Commerce Infrastructure Audit | Jimmy Manalel",
+    description:
+      "Audit commerce infrastructure economics: logistics density, multi-node warehousing, SLA risk, and margin preservation for cross-border brands.",
+    robots: "index, follow",
+    h1MustInclude: "Commerce Infrastructure Audit",
+  },
+  {
+    path: "/strategy-conversation",
+    out: "strategy-conversation/index.html",
+    title: "Request a Strategy Conversation | Jimmy Manalel",
+    description:
+      "Request a strategy conversation with Jimmy Manalel. Share preferred timing for founder advisory, investor narrative, or GCC expansion discussions.",
+    robots: "index, follow",
+    h1MustInclude: "Request a strategy conversation",
+  },
+  {
+    path: "/advisory",
+    out: "advisory/index.html",
+    title: "Startup & GCC Expansion Advisory | Jimmy Manalel",
+    description:
+      "Advisory enquiry for founder strategy, investor narrative architecture, venture readiness, commerce infrastructure, and GCC expansion pathways.",
+    robots: "index, follow",
+    h1MustInclude: "GCC expansion advisory",
+  },
+  {
+    path: "/partnerships",
+    out: "partnerships/index.html",
+    title: "Ecosystem & Strategic Partnerships | Jimmy Manalel",
+    description:
+      "Partnership enquiries for speaking, founder-community collaboration, ecosystem programmes, and strategic introductions with Jimmy Manalel.",
+    robots: "index, follow",
+    h1MustInclude: "strategic partnerships",
+  },
+];
+
+function installDom(url) {
   const dom = new JSDOM("<!doctype html><html><body></body></html>", {
-    url: "https://www.jimmymanalel.com/",
+    url,
     pretendToBeVisual: true,
   });
 
   const { window } = dom;
-
-  // Attach DOM globals expected by React / motion.
   const assign = [
     "document",
     "HTMLElement",
@@ -46,6 +121,7 @@ function installDom() {
     "HTMLInputElement",
     "HTMLTextAreaElement",
     "HTMLFormElement",
+    "HTMLSelectElement",
     "Event",
     "CustomEvent",
   ];
@@ -55,12 +131,11 @@ function installDom() {
       try {
         globalThis[key] = window[key];
       } catch {
-        // Some Node globals are read-only; ignore.
+        /* ignore */
       }
     }
   }
 
-  // window / navigator / self can be non-writable on newer Node versions.
   try {
     globalThis.window = window;
   } catch {
@@ -80,7 +155,6 @@ function installDom() {
     /* ignore */
   }
 
-  // Storage
   const memory = new Map();
   const storage = {
     getItem: (k) => (memory.has(k) ? memory.get(k) : null),
@@ -113,7 +187,6 @@ function installDom() {
     }));
   globalThis.matchMedia = window.matchMedia.bind(window);
 
-  // ResizeObserver stub used by some layout libraries
   if (!window.ResizeObserver) {
     window.ResizeObserver = class {
       observe() {}
@@ -133,23 +206,94 @@ function installDom() {
   }
   globalThis.IntersectionObserver = window.IntersectionObserver;
 
+  // Avoid scroll/focus side effects during SSR
+  window.scrollTo = () => {};
+  if (window.HTMLElement?.prototype?.focus) {
+    window.HTMLElement.prototype.focus = () => {};
+  }
+
   return dom;
 }
 
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function applyRouteMeta(templateHtml, route) {
+  const canonical =
+    route.path === "/" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${route.path}`;
+  let html = templateHtml;
+
+  html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(route.title)}</title>`);
+
+  html = html.replace(
+    /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="description" content="${escapeHtml(route.description)}" />`
+  );
+  html = html.replace(
+    /<meta\s+name="robots"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="robots" content="${escapeHtml(route.robots)}" />`
+  );
+  html = html.replace(
+    /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i,
+    `<link rel="canonical" href="${escapeHtml(canonical)}" />`
+  );
+  html = html.replace(
+    /<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:url" content="${escapeHtml(canonical)}" />`
+  );
+  html = html.replace(
+    /<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:title" content="${escapeHtml(route.title)}" />`
+  );
+  html = html.replace(
+    /<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:description" content="${escapeHtml(route.description)}" />`
+  );
+  html = html.replace(
+    /<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="twitter:title" content="${escapeHtml(route.title)}" />`
+  );
+  html = html.replace(
+    /<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="twitter:description" content="${escapeHtml(route.description)}" />`
+  );
+
+  return { html, canonical };
+}
+
 function injectIntoRoot(templateHtml, appHtml) {
-  // Match only the empty Vite shell root (avoid truncating on nested </div>).
   const emptyRoot = /<div id="root"><\/div>/;
   if (!emptyRoot.test(templateHtml)) {
-    // Already filled or unexpected shape — replace from root open to end of body carefully.
     if (!/<div id="root"[^>]*>/.test(templateHtml)) {
-      throw new Error("dist/index.html is missing #root");
+      throw new Error("template is missing #root");
     }
     return templateHtml.replace(
-      /<div id="root"[^>]*>[\s\S]*<\/div>\s*<\/body>/,
+      /<div id="root"[^>]*>[\s\S]*?<\/div>\s*<\/body>/,
       `<div id="root">${appHtml}</div>\n  </body>`
     );
   }
   return templateHtml.replace(emptyRoot, `<div id="root">${appHtml}</div>`);
+}
+
+function assertNoBookingDates(appHtml, routePath) {
+  const bookingIsoDates = appHtml.match(/\b20\d{2}-\d{2}-\d{2}\b/g) || [];
+  const bookingHumanDates =
+    appHtml.match(
+      /\b(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}\b/g
+    ) || [];
+  if (bookingIsoDates.length || bookingHumanDates.length) {
+    throw new Error(
+      `Prerender must not embed live booking dates (${routePath}). Found: ${[
+        ...bookingIsoDates,
+        ...bookingHumanDates,
+      ].join(", ")}`
+    );
+  }
 }
 
 async function main() {
@@ -158,7 +302,13 @@ async function main() {
   }
 
   const before404 = fs.existsSync(dist404) ? fs.readFileSync(dist404, "utf8") : null;
-  const dom = installDom();
+  const shellTemplate = fs.readFileSync(distIndex, "utf8");
+
+  // Ensure empty root for each route shell derived from vite output
+  const baseShell = shellTemplate.replace(
+    /<div id="root"[^>]*>[\s\S]*?<\/div>/,
+    '<div id="root"></div>'
+  );
 
   const vite = await createViteServer({
     root,
@@ -168,52 +318,108 @@ async function main() {
   });
 
   try {
-    const mod = await vite.ssrLoadModule("/src/App.tsx");
-    const App = mod.default;
-    if (!App) throw new Error("Failed to load App default export");
+    const routerMod = await vite.ssrLoadModule("/src/router.tsx");
+    const { createPrerenderRouter } = routerMod;
+    if (!createPrerenderRouter) throw new Error("createPrerenderRouter missing from router.tsx");
 
-    let appHtml;
-    try {
-      appHtml = renderToString(React.createElement(App));
-    } catch (error) {
-      console.error("renderToString failed. Browser APIs or component SSR incompatibility detected.");
-      throw error;
+    const { RouterProvider } = await vite.ssrLoadModule("react-router");
+
+    console.log("Prerender routes:");
+
+    for (const route of ROUTES) {
+      const dom = installDom(`${SITE_ORIGIN}${route.path === "/" ? "/" : route.path}`);
+      try {
+        const router = createPrerenderRouter(route.path);
+        let appHtml;
+        try {
+          appHtml = renderToString(
+            React.createElement(RouterProvider, { router })
+          );
+        } catch (error) {
+          console.error(`renderToString failed for ${route.path}`);
+          throw error;
+        }
+
+        if (!appHtml || appHtml.length < 100) {
+          throw new Error(
+            `Prerender produced short HTML for ${route.path} (${appHtml?.length || 0} chars)`
+          );
+        }
+
+        if (!/<h1[\s>]/i.test(appHtml)) {
+          throw new Error(`Missing H1 for ${route.path}`);
+        }
+        if (!appHtml.includes(route.h1MustInclude)) {
+          throw new Error(
+            `H1 content missing for ${route.path}; expected substring: ${route.h1MustInclude}`
+          );
+        }
+
+        // HubSpot tracking must not run in prerender (component is client-only; still guard)
+        if (/js\.hs-scripts\.com|hs-script-loader/i.test(appHtml)) {
+          throw new Error(`HubSpot tracking leaked into prerender for ${route.path}`);
+        }
+
+        assertNoBookingDates(appHtml, route.path);
+
+        if (route.path === "/strategy-conversation") {
+          if (!appHtml.includes("Loading current availability")) {
+            throw new Error(
+              'Strategy conversation prerender must show "Loading current availability…"'
+            );
+          }
+        }
+
+        if (appHtml.includes("opacity:0") || appHtml.includes("opacity: 0")) {
+          throw new Error(`Prerender opacity:0 content on ${route.path}`);
+        }
+
+        const { html: metaShell, canonical } = applyRouteMeta(baseShell, route);
+        const next = injectIntoRoot(metaShell, appHtml);
+
+        const titleCount = (next.match(/<title>/gi) || []).length;
+        const canonicalCount = (next.match(/rel="canonical"/gi) || []).length;
+        if (titleCount !== 1) throw new Error(`${route.path}: expected 1 title, found ${titleCount}`);
+        if (canonicalCount !== 1) {
+          throw new Error(`${route.path}: expected 1 canonical, found ${canonicalCount}`);
+        }
+        if (!next.includes(canonical)) {
+          throw new Error(`${route.path}: canonical URL missing from output`);
+        }
+        if (!new RegExp(`content="${route.robots.replace(",", "\\s*,\\s*")}"`, "i").test(next)) {
+          throw new Error(`${route.path}: robots directive missing`);
+        }
+
+        // No legacy public fragments in crawlable output (except schema @id fragments)
+        const badFrags = [
+          'href="#workspace-hub"',
+          'href="#booking-section"',
+          'href="#advisory-enquiry"',
+          'href="#partnership-enquiry"',
+          "/#workspace-hub",
+          "/#booking-section",
+          "/#advisory-enquiry",
+          "/#partnership-enquiry",
+        ];
+        for (const frag of badFrags) {
+          if (next.includes(frag)) {
+            throw new Error(`${route.path}: legacy fragment still present: ${frag}`);
+          }
+        }
+
+        const outPath = path.join(distDir, route.out);
+        fs.mkdirSync(path.dirname(outPath), { recursive: true });
+        fs.writeFileSync(outPath, next, "utf8");
+        console.log(`  ✓ ${route.path} → ${route.out} (${appHtml.length} chars)`);
+      } finally {
+        dom.window.close();
+      }
     }
-
-    if (!appHtml || appHtml.length < 200) {
-      throw new Error(`Prerender produced unexpectedly short HTML (${appHtml?.length || 0} chars)`);
-    }
-
-    const hasH1 = /<h1[\s>]/i.test(appHtml);
-    const hasHero =
-      appHtml.includes("Venture corridor builder connecting") ||
-      appHtml.includes("venture corridor builder connecting");
-    if (!hasH1 || !hasHero) {
-      throw new Error("Prerender output missing expected homepage H1 content");
-    }
-
-    const template = fs.readFileSync(distIndex, "utf8");
-    // Guard: do not allow homepage metadata to be written into 404
-    if (before404 && /og:url/.test(before404) && /jimmymanalel\.com\/\"/.test(before404) && !/noindex/.test(before404)) {
-      // only warn — 404 should remain noindex without homepage og tags
-    }
-
-    const next = injectIntoRoot(template, appHtml);
-
-    // Sanity: metadata still present once
-    const titleCount = (next.match(/<title>/gi) || []).length;
-    const canonicalCount = (next.match(/rel="canonical"/gi) || []).length;
-    const robotsIndex = /name="robots"\s+content="index, follow"/i.test(next);
-    if (titleCount !== 1) throw new Error(`Expected 1 <title>, found ${titleCount}`);
-    if (canonicalCount !== 1) throw new Error(`Expected 1 canonical, found ${canonicalCount}`);
-    if (!robotsIndex) throw new Error("Homepage robots index,follow missing after prerender");
-
-    fs.writeFileSync(distIndex, next, "utf8");
 
     if (before404 !== null) {
       const after404 = fs.readFileSync(dist404, "utf8");
       if (after404 !== before404) {
-        throw new Error("prerender-homepage unexpectedly modified dist/404.html");
+        throw new Error("prerender unexpectedly modified dist/404.html");
       }
       if (!/noindex,\s*follow/i.test(after404)) {
         throw new Error("dist/404.html missing noindex, follow");
@@ -223,39 +429,13 @@ async function main() {
       }
     }
 
-    // Fail the build if build-relative booking dates leaked into the shell.
-    const bookingIsoDates = appHtml.match(/\b20\d{2}-\d{2}-\d{2}\b/g) || [];
-    const bookingHumanDates =
-      appHtml.match(/\b(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}\b/g) ||
-      [];
-    if (bookingIsoDates.length || bookingHumanDates.length) {
-      throw new Error(
-        `Prerender must not embed live booking dates. Found: ${[
-          ...bookingIsoDates,
-          ...bookingHumanDates,
-        ].join(", ")}`
-      );
-    }
-    if (!appHtml.includes("Loading current availability")) {
-      throw new Error(
-        'Prerender booking section must show the neutral "Loading current availability…" state'
-      );
-    }
-    if (appHtml.includes("opacity:0") || appHtml.includes("opacity: 0")) {
-      throw new Error("Prerender output contains opacity:0 content");
-    }
-
     console.log("Prerender complete:");
-    console.log(`  injected HTML: ${appHtml.length} chars`);
-    console.log(`  H1 present: ${hasH1}`);
-    console.log(`  hero copy present: ${hasHero}`);
-    console.log(`  title tags: ${titleCount}`);
-    console.log(`  canonical tags: ${canonicalCount}`);
-    console.log(`  booking dates suppressed: yes`);
+    console.log(`  routes: ${ROUTES.length}`);
     console.log(`  404.html preserved: ${before404 !== null ? "yes" : "n/a"}`);
+    console.log("  booking dates suppressed: yes");
+    console.log("  hubspot tracking in prerender: no");
   } finally {
     await vite.close();
-    dom.window.close();
   }
 }
 

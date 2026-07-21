@@ -4,7 +4,9 @@
  */
 
 import React, { useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router";
 import { Compass, Home, Mail } from "lucide-react";
+import { ROUTES, isApprovedPath, normalizePathname } from "../lib/siteRoutes";
 
 const HOME_TITLE = "Jimmy Manalel | Venture Corridor Builder & Cross-Border Startup Strategist";
 const NOT_FOUND_TITLE = "Page Not Found | Jimmy Manalel";
@@ -61,7 +63,10 @@ function getRouteAwareCopy(pathname: string): { heading: string; body: string } 
  */
 export default function NotFoundPage() {
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "/";
+  const location = useLocation();
+  const pathname =
+    location?.pathname ||
+    (typeof window !== "undefined" ? window.location.pathname : "/");
   const safePath = sanitizePath(pathname);
   const copy = getRouteAwareCopy(safePath);
 
@@ -99,8 +104,8 @@ export default function NotFoundPage() {
     <div className="min-h-screen bg-[#050505] text-zinc-300 font-sans antialiased selection:bg-amber-500 selection:text-black">
       <header className="sticky top-0 z-50 border-b border-[#1f1f1f] bg-[#050505]/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <a
-            href="/"
+          <Link
+            to={ROUTES.home}
             className="flex items-center gap-3 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
             aria-label="Jimmy Manalel homepage"
           >
@@ -115,13 +120,13 @@ export default function NotFoundPage() {
                 Venture Corridor Builder · Cross-Border Startup Strategist
               </span>
             </span>
-          </a>
-          <a
-            href="/#booking-section"
+          </Link>
+          <Link
+            to={ROUTES.strategyConversation}
             className="rounded-lg bg-amber-500 px-4 py-2 text-xs font-bold text-black transition hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 md:text-sm"
           >
-            Book Clarity Session
-          </a>
+            Request a Strategy Conversation
+          </Link>
         </div>
       </header>
 
@@ -155,19 +160,19 @@ export default function NotFoundPage() {
             </p>
           ) : null}
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <a
-              href="/"
+            <Link
+              to={ROUTES.home}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-6 py-3 text-sm font-bold text-black transition hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
             >
               <Home className="h-4 w-4" aria-hidden="true" />
               Return to Homepage
-            </a>
-            <a
-              href="/#ecosystem-engagement"
+            </Link>
+            <Link
+              to={ROUTES.ventureTools}
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#1f1f1f] px-6 py-3 text-sm font-semibold text-zinc-300 transition hover:bg-zinc-900 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
             >
-              Explore My Work
-            </a>
+              Explore Founder Tools
+            </Link>
             <a
               href="mailto:jimmymanalel@gmail.com"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#1f1f1f] px-6 py-3 text-sm font-semibold text-zinc-300 transition hover:bg-zinc-900 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
@@ -185,19 +190,21 @@ export default function NotFoundPage() {
       <footer className="mt-auto border-t border-[#1f1f1f] bg-[#0c0c0c] py-8">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-3 px-4 font-mono text-xs text-zinc-500 sm:flex-row sm:items-center sm:px-6 lg:px-8">
           <span>© 2026 Jimmy Manalel. All Rights Reserved.</span>
-          <a
-            href="/"
+          <Link
+            to={ROUTES.home}
             className="transition hover:text-amber-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
           >
             www.jimmymanalel.com
-          </a>
+          </Link>
         </div>
       </footer>
     </div>
   );
 }
 
+/** @deprecated Use isApprovedPath from siteRoutes */
 export function isHomePath(pathname: string): boolean {
-  const normalized = pathname.replace(/\/+$/, "") || "/";
-  return normalized === "/";
+  return normalizePathname(pathname) === "/";
 }
+
+export { isApprovedPath };
