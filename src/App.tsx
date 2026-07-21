@@ -29,12 +29,13 @@ import ClarityAssistant from "./components/ClarityAssistant";
 import PitchGrader from "./components/PitchGrader";
 import EcomAuditCalculator from "./components/EcomAuditCalculator";
 import BookingForm from "./components/BookingForm";
-import GrowthMarketingHub from "./components/GrowthMarketingHub";
+import AdvisoryEnquiryForm from "./components/leads/AdvisoryEnquiryForm";
+import PartnershipEnquiryForm from "./components/leads/PartnershipEnquiryForm";
 import NotFoundPage, { isHomePath } from "./components/NotFoundPage";
 import { motionInitial } from "./utils/motion";
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<"chat" | "grader" | "calculator" | "growth">("chat");
+  const [activeTab, setActiveTab] = useState<"chat" | "grader" | "calculator">("chat");
 
   // Defensive client-side guard. Production unknown paths are handled by public/404.html
   // with a true HTTP 404. This only renders if the SPA shell is served for a non-home path.
@@ -90,7 +91,7 @@ export default function App() {
     }
   };
 
-  const handleNavToTab = (tab: "chat" | "grader" | "calculator" | "growth") => {
+  const handleNavToTab = (tab: "chat" | "grader" | "calculator") => {
     setActiveTab(tab);
     setTimeout(() => {
       handleSmoothScroll("workspace-hub");
@@ -142,7 +143,7 @@ export default function App() {
             <button type="button" onClick={() => handleNavToTab("chat")} className="hover:text-white transition cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded">Dialogue</button>
             <button type="button" onClick={() => handleNavToTab("grader")} className="hover:text-white transition cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded">Narrative Grader</button>
             <button type="button" onClick={() => handleNavToTab("calculator")} className="hover:text-white transition cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded">Analytics</button>
-            <button type="button" onClick={() => handleNavToTab("growth")} className="hover:text-white transition cursor-pointer text-amber-500 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded">Growth & Leads</button>
+            <a href="#advisory-enquiry" onClick={(e) => handleSectionNav(e, "advisory-enquiry")} className="hover:text-white transition text-amber-500 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 rounded">Work With Jimmy</a>
           </nav>
 
           <a
@@ -151,7 +152,7 @@ export default function App() {
             className="bg-amber-500 hover:bg-amber-400 text-black px-4 py-2 rounded-lg text-xs md:text-sm font-sans font-bold shadow-md transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
             id="header-booking"
           >
-            Book Clarity Session
+            Request a Strategy Conversation
           </a>
         </div>
       </header>
@@ -459,19 +460,6 @@ export default function App() {
                 <Calculator className="w-4 h-4 flex-shrink-0" />
                 <span>03. Infrastructure Analytics</span>
               </button>
-
-              <button
-                onClick={() => setActiveTab("growth")}
-                id="tab-select-growth"
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs md:text-sm font-sans font-semibold cursor-pointer transition-all duration-250 flex-1 justify-center md:flex-initial ${
-                  activeTab === "growth"
-                    ? "bg-amber-500 text-black shadow-lg shadow-amber-500/10 font-bold scale-[1.01]"
-                    : "hover:bg-zinc-900 border border-transparent text-zinc-400"
-                }`}
-              >
-                <TrendingUp className="w-4 h-4 flex-shrink-0" />
-                <span>04. Growth & Leads</span>
-              </button>
             </div>
 
             {/* Render selected workspace frame with animations */}
@@ -512,18 +500,6 @@ export default function App() {
                     <EcomAuditCalculator />
                   </motion.div>
                 )}
-
-                {activeTab === "growth" && (
-                  <motion.div
-                    key="growth"
-                    initial={motionInitial({ opacity: 0, y: 10 })}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <GrowthMarketingHub />
-                  </motion.div>
-                )}
               </AnimatePresence>
             </div>
           </div>
@@ -532,6 +508,12 @@ export default function App() {
         {/* 6. Active Scheduler Form */}
         <section>
           <BookingForm />
+        </section>
+
+        {/* 7. Public lead forms — native branded conversion only */}
+        <section className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          <AdvisoryEnquiryForm />
+          <PartnershipEnquiryForm />
         </section>
 
       </main>

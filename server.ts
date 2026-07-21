@@ -3,6 +3,9 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
+import { hubspotStatusPayload, syncLeadToHubSpot } from "./lib/hubspotContact";
+import { processLeadSubmission } from "./lib/leads/processLead";
+import { isHubSpotSandboxAuthorized } from "./lib/leads/env";
 
 dotenv.config();
 
@@ -202,87 +205,47 @@ Ensure your advice is strategic, direct, practical, and highly specialized to th
 });
 
 
-// 3. API Endpoint: HubSpot Integration Status
+// 3–4. HubSpot Contacts sandbox (legacy admin tooling — not public in production)
 app.get("/api/hubspot/status", (req, res) => {
-  const isConfigured = !!process.env.HUBSPOT_ACCESS_TOKEN;
-  return res.json({
-    connected: isConfigured,
-    message: isConfigured 
-      ? "HubSpot CRM is configured and live on this corridor application." 
-      : "HubSpot token not found. Inactive fallback mode is running.",
-    apiEndpoint: "https://api.hubapi.com/crm/v3/objects/contacts"
-  });
+  const headers = {
+    get: (name: string) => {
+      const v = req.headers[name.toLowerCase()];
+      if (Array.isArray(v)) return v[0] ?? null;
+      return v ?? null;
+    },
+  };
+  if (!isHubSpotSandboxAuthorized(headers)) {
+    return res.status(404).json({ error: "not_found" });
+  }
+  return res.json(hubspotStatusPayload(process.env.HUBSPOT_ACCESS_TOKEN));
 });
 
-// 4. API Endpoint: HubSpot Lead Sync
 app.post("/api/hubspot/sync", async (req, res) => {
-  const { email, firstname, lastname, company, message, source, details } = req.body;
-
-  if (!email) {
-    return res.status(400).json({ error: "Email is required for HubSpot contact creation" });
-  }
-
-  const token = process.env.HUBSPOT_ACCESS_TOKEN;
-
-  // Track the raw payload we construct
-  const hubspotPayload = {
-    properties: {
-      email: email,
-      firstname: firstname || "Founder",
-      lastname: lastname || "User",
-      company: company || "Unspecified Venture",
-      message: message || "No custom message provided.",
-      hs_lead_status: "NEW",
-      description: `Synced from Jimmy Manalel Strategic Advisor Platform (${source || "General submission"}). ${details || ""}`
-    }
+  const headers = {
+    get: (name: string) => {
+      const v = req.headers[name.toLowerCase()];
+      if (Array.isArray(v)) return v[0] ?? null;
+      return v ?? null;
+    },
   };
-
-  if (!token) {
-    // Return a rich dry-run simulation payload so the user can verify the integration payload
-    return res.json({
-      success: true,
-      dryRun: true,
-      message: "Lead successfully captured in local workspace. HubSpot Access Token is missing in environment variables, so CRM sync was bypassed.",
-      payloadSent: hubspotPayload
-    });
+  if (!isHubSpotSandboxAuthorized(headers)) {
+    return res.status(404).json({ error: "not_found" });
   }
+  const { status, result } = await syncLeadToHubSpot(req.body || {}, process.env.HUBSPOT_ACCESS_TOKEN);
+  return res.status(status).json(result);
+});
 
-  try {
-    const apiResponse = await fetch("https://api.hubapi.com/crm/v3/objects/contacts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify(hubspotPayload)
-    });
-
-    if (!apiResponse.ok) {
-      const errorText = await apiResponse.text();
-      console.error("HubSpot API error response:", errorText);
-      return res.status(apiResponse.status).json({
-        success: false,
-        error: `HubSpot API returned status ${apiResponse.status}`,
-        details: errorText
-      });
-    }
-
-    const data = await apiResponse.json();
-    return res.json({
-      success: true,
-      dryRun: false,
-      contactId: data.id,
-      message: "Contact successfully synchronized on HubSpot portal.",
-      rawResponse: data
-    });
-  } catch (error: any) {
-    console.error("Critical HubSpot synchronization failure:", error);
-    return res.status(500).json({
-      success: false,
-      error: "Failed to connect to HubSpot servers.",
-      details: error.message || error
-    });
-  }
+// 5. Website lead capture → HubSpot Forms API (shared with Vercel /api/leads/submit)
+app.post("/api/leads/submit", async (req, res) => {
+  const ip =
+    (typeof req.headers["x-forwarded-for"] === "string"
+      ? req.headers["x-forwarded-for"].split(",")[0]?.trim()
+      : undefined) || req.socket.remoteAddress;
+  const { status, body } = await processLeadSubmission(req.body || {}, {
+    ip,
+    userAgent: req.headers["user-agent"],
+  });
+  return res.status(status).json(body);
 });
 
 

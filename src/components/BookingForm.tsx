@@ -159,12 +159,11 @@ export default function BookingForm() {
       setActiveBookings(updatedList);
       localStorage.setItem("jimmy_active_bookings", JSON.stringify(updatedList));
 
+      // Optional conversion signal only — never uses visitor-supplied tracking IDs.
       if (typeof window !== "undefined") {
-        const storedGadsId = localStorage.getItem("jimmy_gads_measurement_id") || "";
         (window as any).dataLayer = (window as any).dataLayer || [];
         (window as any).dataLayer.push({
           event: "lead_form_conversion",
-          gads_id: storedGadsId || "unsigned_corridor_lead",
           conversion_value: 0.0,
         });
       }

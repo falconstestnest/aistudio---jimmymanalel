@@ -7,6 +7,7 @@ import React, { useState, useMemo } from "react";
 import { motion } from "motion/react";
 import { ShoppingCart, Truck, TrendingDown, HelpCircle, ShieldAlert, BadgeInfo, CheckCircle, Scale, DollarSign } from "lucide-react";
 import { EcomMetrics } from "../types";
+import EmailResultsCapture from "./leads/EmailResultsCapture";
 
 export default function EcomAuditCalculator() {
   const [metrics, setMetrics] = useState<EcomMetrics>({
@@ -473,6 +474,14 @@ export default function EcomAuditCalculator() {
               <p className="text-xs md:text-sm leading-relaxed mt-1">{advisoryTake.text}</p>
             </div>
           </div>
+
+          <EmailResultsCapture
+            toolUsed="Commerce Infrastructure Analytics"
+            assessmentScore={`${calculations.ltvToCacRatio.toFixed(1)}x LTV:CAC`}
+            assessmentSummary={`${advisoryTake.title}. Monthly net ${calculations.monthlyNetProfit.toLocaleString()} AED. Logistics ${calculations.logisticsRatio.toFixed(1)}% of AOV. ${advisoryTake.text}`}
+            serviceInterest="Commerce Infrastructure Review"
+            componentSource="ecom-audit-calculator"
+          />
         </div>
       </div>
     </div>

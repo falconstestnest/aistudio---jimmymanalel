@@ -17,7 +17,18 @@ import {
   RefreshCw
 } from "lucide-react";
 
+/**
+ * Developer-only CRM/ads sandbox.
+ * Not imported by the public App. Extra guard: never render outside DEV.
+ */
 export default function GrowthMarketingHub() {
+  if (!import.meta.env.DEV) {
+    return null;
+  }
+  return <GrowthMarketingHubDev />;
+}
+
+function GrowthMarketingHubDev() {
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
   const [checkingStatus, setCheckingStatus] = useState<boolean>(true);
   const [statusMessage, setStatusMessage] = useState<string>("");

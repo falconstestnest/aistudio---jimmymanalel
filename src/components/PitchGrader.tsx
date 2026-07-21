@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { FileWarning, CheckCircle, BarChart3, TrendingUp, AlertTriangle, RefreshCw, Layers, ShieldCheck, Zap } from "lucide-react";
 import { PitchInput, PitchGradeResult } from "../types";
+import EmailResultsCapture from "./leads/EmailResultsCapture";
 
 export default function PitchGrader() {
   const [inputs, setInputs] = useState<PitchInput>({
@@ -50,61 +51,7 @@ export default function PitchGrader() {
     setIsLoading(true);
     setResult(null);
 
-    // HubSpot Automatic Sync Payload
-    const syncPayload = {
-      email: inputs.email || "grader-lead@example.com",
-      firstname: inputs.name ? inputs.name.split(" ")[0] : "Founder",
-      lastname: inputs.name ? inputs.name.split(" ").slice(1).join(" ") : "Grader User",
-      company: inputs.name || "Grader Venture",
-      message: `Elevator Pitch: ${inputs.pitch}`,
-      source: "Narrative Diagnostic Grader",
-      details: `Target: ${inputs.targetUser || "Unspecified"}. Model: ${inputs.businessModel || "Unspecified"}. GCC plan: ${inputs.gccOpportunity || "Unspecified"}. Traction: ${inputs.currentTraction || "Unspecified"}.`
-    };
-
-    // 1. Process HubSpot Server-Side Sync
-    fetch("/api/hubspot/sync", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(syncPayload)
-    })
-      .then(res => res.json())
-      .then(syncData => {
-        console.log("Automatic HubSpot grader synchronization response:", syncData);
-        
-        // Log client-side sandbox feedback
-        const conversionLogs = localStorage.getItem("jimmy_conversion_logs");
-        let parsedLogs = [];
-        if (conversionLogs) {
-          try { parsedLogs = JSON.parse(conversionLogs); } catch (err) {}
-        }
-        const newLog = {
-          id: Math.random().toString(),
-          time: new Date().toLocaleTimeString(),
-          action: syncData.dryRun 
-            ? `HubSpot dry-run grading sync: ${inputs.email}`
-            : `HubSpot live contact synced from grader successfully: ${inputs.email}`,
-          status: "success" as const,
-          payload: syncData.payloadSent || syncData.rawResponse
-        };
-        localStorage.setItem("jimmy_conversion_logs", JSON.stringify([newLog, ...parsedLogs].slice(0, 8)));
-      })
-      .catch(err => {
-        console.error("HubSpot grader automatic sync error:", err);
-      });
-
-    // 2. Process Google Ads DataLayer Trigger
-    if (typeof window !== "undefined") {
-      const storedGadsId = localStorage.getItem("jimmy_gads_measurement_id") || "";
-      (window as any).dataLayer = (window as any).dataLayer || [];
-      (window as any).dataLayer.push({
-        event: "lead_form_conversion",
-        gads_id: storedGadsId || "unsigned_corridor_grader_lead",
-        conversion_value: 0.00
-      });
-    }
-
+    // Grade first; optional CRM capture is offered after results (EmailResultsCapture).
     try {
       const response = await fetch("/api/pitch-grader", {
         method: "POST",
@@ -462,9 +409,24 @@ export default function PitchGrader() {
               </div>
             </div>
 
+            <EmailResultsCapture
+              toolUsed="Narrative Diagnostic Grader"
+              assessmentScore={result?.overallScore}
+              assessmentSummary={[
+                result?.summary,
+                result?.storytellingGrade ? `Story: ${result.storytellingGrade}` : "",
+                result?.executionGrade ? `Execution: ${result.executionGrade}` : "",
+                result?.marketFitGrade ? `Market fit: ${result.marketFitGrade}` : "",
+              ]
+                .filter(Boolean)
+                .join(" | ")}
+              serviceInterest="Investor Narrative Architecture"
+              componentSource="pitch-grader"
+            />
+
             <div className="border-t border-[#1f1f1f] pt-6 flex justify-between items-center">
               <p className="text-xs text-zinc-500 font-mono">
-                Assessed at 2026 UTC • Locked based on present specifications.
+                Results shown immediately. Email capture is optional.
               </p>
               <button
                 type="button"
