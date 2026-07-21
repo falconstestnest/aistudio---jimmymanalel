@@ -454,21 +454,27 @@ export default function EcomAuditCalculator() {
           <div className={`p-5 rounded-2xl border flex gap-3.5 items-start ${
             advisoryTake.type === "danger"
               ? "bg-red-500/5 border-red-500/10 text-zinc-300"
-              : advisoryTake.type === "warning"
+              : advisoryTake.type === "warning" || advisoryTake.type === "info"
               ? "bg-amber-500/5 border-amber-500/10 text-zinc-300"
               : "bg-emerald-500/5 border-emerald-500/10 text-zinc-300"
           }`}>
             <span className="flex-shrink-0 mt-0.5">
               {advisoryTake.type === "danger" ? (
                 <ShieldAlert className="w-5 h-5 text-red-500" />
-              ) : advisoryTake.type === "warning" ? (
+              ) : advisoryTake.type === "warning" || advisoryTake.type === "info" ? (
                 <BadgeInfo className="w-5 h-5 text-amber-500" />
               ) : (
                 <CheckCircle className="w-5 h-5 text-emerald-500" />
               )}
             </span>
             <div>
-              <h4 className={`text-sm font-bold font-sans tracking-tight ${advisoryTake.type === "danger" ? "text-red-400" : advisoryTake.type === "warning" ? "text-amber-500" : "text-emerald-400"}`}>
+              <h4 className={`text-sm font-bold font-sans tracking-tight ${
+                advisoryTake.type === "danger"
+                  ? "text-red-400"
+                  : advisoryTake.type === "warning" || advisoryTake.type === "info"
+                    ? "text-amber-500"
+                    : "text-emerald-400"
+              }`}>
                 {advisoryTake.title}
               </h4>
               <p className="text-xs md:text-sm leading-relaxed mt-1">{advisoryTake.text}</p>
