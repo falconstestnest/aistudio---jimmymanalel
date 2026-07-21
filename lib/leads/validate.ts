@@ -6,7 +6,7 @@ import {
   type LeadSubmissionInput,
   type LeadType,
   type ValidatedLead,
-} from "./types";
+} from "./types.js";
 
 const MAX = {
   name: 80,

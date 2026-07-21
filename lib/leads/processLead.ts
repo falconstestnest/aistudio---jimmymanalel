@@ -1,7 +1,7 @@
-import { checkRateLimit } from "./rateLimit";
-import { submitToHubSpotForm, successSupportCopy } from "./hubspotForms";
-import type { LeadSubmissionInput, PublicLeadResponse } from "./types";
-import { validateLeadSubmission } from "./validate";
+import { checkRateLimit } from "./rateLimit.js";
+import { submitToHubSpotForm, successSupportCopy } from "./hubspotForms.js";
+import type { LeadSubmissionInput, PublicLeadResponse } from "./types.js";
+import { validateLeadSubmission } from "./validate.js";
 
 const MAX_BODY_CHARS = 20_000;
 

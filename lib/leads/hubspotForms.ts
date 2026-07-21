@@ -1,6 +1,6 @@
-import type { LeadType, PublicLeadResponse, ValidatedLead } from "./types";
-import { getPortalId, resolveFormId } from "./validate";
-import { getRuntimeEnv, isDryRunAllowed, logLeadConfigOnce } from "./env";
+import type { LeadType, PublicLeadResponse, ValidatedLead } from "./types.js";
+import { getPortalId, resolveFormId } from "./validate.js";
+import { getRuntimeEnv, isDryRunAllowed, logLeadConfigOnce } from "./env.js";
 
 const HS_SUBMIT_BASE = "https://api.hsforms.com/submissions/v3/integration/submit";
 
