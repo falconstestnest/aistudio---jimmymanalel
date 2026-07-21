@@ -85,7 +85,7 @@ export const LEGACY_HASH_REDIRECTS: Record<string, string> = {
   "strategy-conversation": ROUTES.strategyConversation,
   "advisory-enquiry": ROUTES.advisory,
   "partnership-enquiry": ROUTES.partnerships,
-  "journey-header": ROUTES.about,
+  // journey-header remains a live homepage anchor — do not redirect away
 };
 
 export type RouteSeo = {

@@ -214,12 +214,10 @@ export default function AsiaGccPage() {
         </section>
 
         <section className="space-y-6" aria-labelledby="pathways">
-          <h2 id="pathways" className="text-2xl font-sans font-bold text-white">
+          <h2 id="pathways" className="text-2xl font-sans font-bold text-white scroll-mt-24">
             Who this is for
           </h2>
-          <div id="audit" className="scroll-mt-24" />
-          <div id="investors" className="scroll-mt-24" />
-          <div id="ecosystems" className="scroll-mt-24" />
+          {/* Anchor IDs #audit #investors #ecosystems live on pathway cards */}
           <CorridorPathways />
         </section>
 

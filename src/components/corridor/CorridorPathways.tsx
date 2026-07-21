@@ -5,7 +5,8 @@ import { ROUTES } from "../../lib/siteRoutes";
 
 const pathways = [
   {
-    id: "founders",
+    /** DOM id for /asia-gcc#audit (footer + pathway deep links) */
+    id: "audit",
     to: `${ROUTES.asiaGcc}#audit`,
     accent: "border-l-amber-500/70",
     heading: "Enter new markets without carrying old assumptions.",
@@ -68,7 +69,8 @@ export default function CorridorPathways() {
       {pathways.map((p) => (
         <article
           key={p.id}
-          className={`rounded-2xl border border-[#1f1f1f] bg-[#0b0b0b] p-6 border-l-2 ${p.accent} flex flex-col`}
+          id={p.id}
+          className={`scroll-mt-24 rounded-2xl border border-[#1f1f1f] bg-[#0b0b0b] p-6 border-l-2 ${p.accent} flex flex-col`}
         >
           <p className="serif-italic text-base md:text-lg text-zinc-200 leading-snug">{p.heading}</p>
           <p className="mt-3 text-xs font-mono uppercase tracking-wider text-amber-500/90">
