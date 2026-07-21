@@ -120,7 +120,7 @@ export default function SiteFooter() {
               </li>
               <li>
                 <Link to={ROUTES.commerceAudit} className={colLink}>
-                  Store economics
+                  Commerce Infrastructure Audit
                 </Link>
               </li>
             </ul>
